@@ -64,11 +64,14 @@ int main(void)
 
 	glm::vec3 m = glm::vec3(1.0f);
 	bool hej[] = {true};
+	// ImGui::CreateContext();
 	// Start rendering loop
 	while (!glfwWindowShouldClose(ctx.window)) {
 		glfwPollEvents();
 		ctx.elapsed_time = glfwGetTime();
 		// display(ctx);
+		// ImGui::GetIO().DisplaySize = ImVec2((float)200, (float)200);
+		// ImGui::NewFrame();
 		glClearColor(0.5, 0.5, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		ImGui_ImplGlfwGL3_NewFrame();
