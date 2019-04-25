@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <specstrings.h>
 
+#include <assimp/Importer.hpp>      // C++ importer interface
+
 struct Context {
 	int width;
 	int height;
@@ -77,7 +79,7 @@ int main(void)
 		ImGui::Checkbox("Check me", hej);
 		ImGui::End();
 		ImGui::Render();
-
+		Assimp::Importer importer;
 		glfwSwapBuffers(ctx.window);
 	}
 
