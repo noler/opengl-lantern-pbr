@@ -323,3 +323,5 @@ Generated\ Files/
 # NUNIT
 *.VisualState.xml
 TestResult.xml
+
+lantern_viewer/x64/Debug/imgui\.ini
