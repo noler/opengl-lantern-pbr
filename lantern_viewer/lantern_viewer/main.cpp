@@ -5,8 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw_gl3.h"
+#include "imgui/lib/imgui.h"
+#include "imgui/lib/imgui_impl_glfw_gl3.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -16,7 +16,6 @@
 
 #include <Windows.h>
 #include <Pathcch.h>
-#include <filesystem>
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include "utils.h"
 
@@ -80,17 +79,22 @@ void displayImGui()
 
 void display(Context& ctx)
 {
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearColor(
+		ctx.global_settings.window_background_color.r, 
+		ctx.global_settings.window_background_color.g, 
+		ctx.global_settings.window_background_color.b, 
+		ctx.global_settings.window_background_color.a
+	);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	displayImGui();
-	drawTriangle(ctx.program, ctx.triangleVAO);
+	drawTriangle(ctx.shader_program, ctx.triangleVAO);
 }
 
 
 void init(Context& ctx)
 {
-	std::cout << getExecPath() + "/shaders/triangle.vert" << std::endl;
-	ctx.program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
+	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
 	                                getExecPath() + "/shaders/mesh.frag");
 
 	ctx.triangleVAO = createTriangleVAO();
@@ -107,11 +111,8 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	ctx.width = 1100;
-	ctx.height = 900;
-	ctx.aspect = float(ctx.width) / float(ctx.height);
-	ctx.window = glfwCreateWindow(ctx.width, ctx.height, "Lantern Viewer", nullptr, nullptr);
-	ctx.zoom_factor = 1.0f;
+	ctx.aspect = float(ctx.global_settings.width) / float(ctx.global_settings.height);
+	ctx.window = glfwCreateWindow(ctx.global_settings.width, ctx.global_settings.height, "Lantern Viewer", nullptr, nullptr);
 
 	glfwMakeContextCurrent(ctx.window);
 	glfwSetWindowUserPointer(ctx.window, &ctx);

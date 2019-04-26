@@ -1,21 +1,20 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include "global_settings.h"
 
 struct Context
 {
-	int width;
-	int height;
-	float aspect;
-
 	GLFWwindow* window;
-	GLuint program;
-	GLuint program_cube;
+	GLuint shader_program;
+
+	GlobalSettings global_settings;
+
+	float aspect;
 
 	GLuint triangleVAO;
 	GLuint positionVBO;
 	GLuint colorVBO;
 	GLuint defaultVAO;
 
-	float elapsed_time;
-	float zoom_factor;
+	double elapsed_time;
 };
