@@ -51,6 +51,9 @@
     <ClCompile Include="mesh\mesh.cpp">
       <Filter>Source Files\mesh</Filter>
     </ClCompile>
+    <ClCompile Include="imgui\menu.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="mesh\mesh.h">
       <Filter>Source Files\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\menu.h">
+      <Filter>Source Files\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

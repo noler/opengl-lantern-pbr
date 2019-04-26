@@ -5,9 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "imgui/lib/imgui.h"
-#include "imgui/lib/imgui_impl_glfw_gl3.h"
-
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
@@ -19,9 +16,11 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include "utils.h"
 
+#include "data_types/context.h"
+
 #include "mesh/mesh.h"
 
-#include "data_types/context.h"
+#include "imgui/menu.h"
 
 #include <boost/algorithm/string/replace.hpp>
 
@@ -32,17 +31,6 @@ std::string getExecPath()
 	std::string path = std::string(result, GetModuleFileNameA(nullptr, result, MAX_PATH));
 	path = path.substr(0, path.find_last_of("\\/"));
 	return boost::replace_all_copy(path, "\\", "/");
-}
-
-void displayImGui()
-{
-	bool dummy[] = {true};
-	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::Begin("This is a title", dummy);
-	ImGui::Text("Magnus is cool");
-	ImGui::Checkbox("Check me", dummy);
-	ImGui::End();
-	ImGui::Render();
 }
 
 void display(Context& ctx)
@@ -99,7 +87,7 @@ int main(void)
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
 	// Initialize GUI
-	ImGui_ImplGlfwGL3_Init(ctx.window, false /*do not install callbacks*/);
+	initImGui(ctx);
 
 	// Initialize rendering
 	glGenVertexArrays(1, &ctx.defaultVAO);
