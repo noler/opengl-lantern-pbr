@@ -1,6 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include "global_settings.h"
+#include <glm/vec3.hpp>
 #include <vector>
 
 // Struct for representing an indexed triangle mesh

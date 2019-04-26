@@ -136,6 +136,7 @@
     <ClCompile Include="imgui\lib\imgui_draw.cpp" />
     <ClCompile Include="imgui\lib\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh\mesh.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="imgui\lib\stb_rect_pack.h" />
     <ClInclude Include="imgui\lib\stb_textedit.h" />
     <ClInclude Include="imgui\lib\stb_truetype.h" />
+    <ClInclude Include="mesh\mesh.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
