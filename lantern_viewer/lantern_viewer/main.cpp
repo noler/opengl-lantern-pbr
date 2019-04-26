@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw_gl3.h"
@@ -30,6 +32,9 @@ struct Context
 	GLuint program;
 	GLuint program_cube;
 
+	GLuint triangleVAO;
+	GLuint positionVBO;
+	GLuint colorVBO;
 	GLuint defaultVAO;
 
 	float elapsed_time;
@@ -44,13 +49,56 @@ std::string getExecPath()
 	return boost::replace_all_copy(path, "\\", "/");
 }
 
+void drawTriangle(GLuint program, GLuint vao)
+{
+	glUseProgram(program);
+
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glUseProgram(0);
+}
+
+
+GLuint createTriangleVAO()
+{
+	const GLfloat vertices[] = {
+		0.0f, 0.5f, 0.0f,
+		-0.5f,-0.5f, 0.0f,
+		0.5f,-0.5f, 0.0f,
+	};
+
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+	return vao;
+}
+
+void display(Context &ctx)
+{
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	drawTriangle(ctx.program, ctx.triangleVAO);
+}
+
+
 void init(Context& ctx)
 {
 	std::cout << getExecPath() + "/shaders/triangle.vert" << std::endl;
 	ctx.program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
 		getExecPath() + "/shaders/mesh.frag");
 
-	// createTriangle(ctx);
+	ctx.triangleVAO = createTriangleVAO();
 }
 
 int main(void)
@@ -89,7 +137,7 @@ int main(void)
 	// Initialize rendering
 	glGenVertexArrays(1, &ctx.defaultVAO);
 	glBindVertexArray(ctx.defaultVAO);
-	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	init(ctx);
 
 	glm::vec3 m = glm::vec3(1.0f);
@@ -98,9 +146,9 @@ int main(void)
 	while (!glfwWindowShouldClose(ctx.window))
 	{
 		glfwPollEvents();
-		ctx.elapsed_time = glfwGetTime();
-		// display(ctx);
-		glClearColor(0.5, 0.5, 0.5, 1.0);
+		//ctx.elapsed_time = glfwGetTime();
+		display(ctx);
+		/*glClearColor(0.5, 0.5, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		ImGui_ImplGlfwGL3_NewFrame();
 		ImGui::Begin("This is a title", hej);
@@ -108,7 +156,7 @@ int main(void)
 		ImGui::Checkbox("Check me", hej);
 		ImGui::End();
 		ImGui::Render();
-		Assimp::Importer importer;
+		Assimp::Importer importer;*/
 		glfwSwapBuffers(ctx.window);
 	}
 
