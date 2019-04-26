@@ -20,26 +20,10 @@
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include "utils.h"
 
+#include "data_types/context.h"
+
 #include <boost/algorithm/string/replace.hpp>
 
-struct Context
-{
-	int width;
-	int height;
-	float aspect;
-
-	GLFWwindow* window;
-	GLuint program;
-	GLuint program_cube;
-
-	GLuint triangleVAO;
-	GLuint positionVBO;
-	GLuint colorVBO;
-	GLuint defaultVAO;
-
-	float elapsed_time;
-	float zoom_factor;
-};
 
 std::string getExecPath()
 {
@@ -64,8 +48,8 @@ GLuint createTriangleVAO()
 {
 	const GLfloat vertices[] = {
 		0.0f, 0.5f, 0.0f,
-		-0.5f,-0.5f, 0.0f,
-		0.5f,-0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
 	};
 
 	GLuint vbo;
@@ -83,11 +67,22 @@ GLuint createTriangleVAO()
 	return vao;
 }
 
-void display(Context &ctx)
+void displayImGui()
+{
+	bool dummy[] = {true};
+	ImGui_ImplGlfwGL3_NewFrame();
+	ImGui::Begin("This is a title", dummy);
+	ImGui::Text("Magnus is cool");
+	ImGui::Checkbox("Check me", dummy);
+	ImGui::End();
+	ImGui::Render();
+}
+
+void display(Context& ctx)
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	displayImGui();
 	drawTriangle(ctx.program, ctx.triangleVAO);
 }
 
@@ -96,7 +91,7 @@ void init(Context& ctx)
 {
 	std::cout << getExecPath() + "/shaders/triangle.vert" << std::endl;
 	ctx.program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
-		getExecPath() + "/shaders/mesh.frag");
+	                                getExecPath() + "/shaders/mesh.frag");
 
 	ctx.triangleVAO = createTriangleVAO();
 }
@@ -140,23 +135,12 @@ int main(void)
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	init(ctx);
 
-	glm::vec3 m = glm::vec3(1.0f);
-	bool hej[] = {true};
 	// Start rendering loop
 	while (!glfwWindowShouldClose(ctx.window))
 	{
 		glfwPollEvents();
-		//ctx.elapsed_time = glfwGetTime();
+		ctx.elapsed_time = glfwGetTime();
 		display(ctx);
-		/*glClearColor(0.5, 0.5, 0.5, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		ImGui_ImplGlfwGL3_NewFrame();
-		ImGui::Begin("This is a title", hej);
-		ImGui::Text("Magnus is cool");
-		ImGui::Checkbox("Check me", hej);
-		ImGui::End();
-		ImGui::Render();
-		Assimp::Importer importer;*/
 		glfwSwapBuffers(ctx.window);
 	}
 

@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{d90980ec-102c-48d0-97b4-1f0f5cd772e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\data_types">
+      <UniqueIdentifier>{6c31c514-9bc2-40c0-81d4-a6e0329fcd65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -61,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="utils.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data_types\context.h">
+      <Filter>Source Files\data_types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
