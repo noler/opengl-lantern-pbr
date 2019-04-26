@@ -1,5 +1,7 @@
 #include "menu.h"
 
+#include "lib/imgui.h"
+#include "lib/imgui_impl_glfw_gl3.h"
 
 void initImGui(Context ctx)
 {

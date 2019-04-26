@@ -1,4 +1,11 @@
 #include "mesh.h"
+#include "../utils.h"
+
+// The attribute locations we will use in the vertex shader
+enum AttributeLocation {
+	POSITION = 0,
+	NORMAL = 1
+};
 
 void loadMesh(const std::string &filename, Mesh *mesh)
 {
