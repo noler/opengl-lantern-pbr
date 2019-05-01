@@ -15,18 +15,69 @@
 
 #include <Windows.h>
 #include <Pathcch.h>
-#include <assimp/Importer.hpp>      // C++ importer interface
 #include "utils.h"
 
 #include "data_types/context.h"
-
-#include "assimp/assimp.h"
+#include "data_types/trackball.h"
 
 #include "mesh/mesh.h"
 
 #include "imgui/menu.h"
 
+
 #include <boost/algorithm/string/replace.hpp>
+
+
+// Helper functions
+namespace {
+	glm::vec3 mapMousePointToUnitSphere(glm::vec2 point, double radius, glm::vec2 center)
+	{
+		float x = point[0] - center[0];
+		float y = -point[1] + center[1];
+		float z = 0.0f;
+		if (x * x + y * y < radius * radius / 2.0f) {
+			z = std::sqrt(radius * radius - (x * x + y * y));
+		}
+		else {
+			z = (radius * radius / 2.0f) / std::sqrt(x * x + y * y);
+		}
+		return glm::normalize(glm::vec3(x, y, z));
+	}
+}
+
+// Start trackball tracking
+void trackballStartTracking(Trackball &trackball, glm::vec2 point)
+{
+	trackball.vStart = mapMousePointToUnitSphere(point, trackball.radius, trackball.center);
+	trackball.qStart = glm::quat(trackball.qCurrent);
+	trackball.tracking = true;
+}
+
+// Stop trackball tracking
+void trackballStopTracking(Trackball &trackball)
+{
+	trackball.tracking = false;
+}
+
+// Rotate trackball from, e.g., mouse movement
+void trackballMove(Trackball &trackball, glm::vec2 point)
+{
+	glm::vec3 vCurrent = mapMousePointToUnitSphere(point, trackball.radius, trackball.center);
+	glm::vec3 rotationAxis = glm::cross(trackball.vStart, vCurrent);
+	float dotProduct = std::max(std::min(glm::dot(trackball.vStart, vCurrent), 1.0f), -1.0f);
+	float rotationAngle = std::acos(dotProduct);
+	float eps = 0.01f;
+	if (rotationAngle < eps) {
+		trackball.qCurrent = glm::quat(trackball.qStart);
+	}
+	else {
+		// Note: here we provide rotationAngle in radians. Older versions
+		// of GLM (0.9.3 or earlier) require the angle in degrees.
+		glm::quat q = glm::angleAxis(rotationAngle, rotationAxis);
+		q = glm::normalize(q);
+		trackball.qCurrent = glm::normalize(glm::cross(q, trackball.qStart));
+	}
+}
 
 
 std::string getExecPath()
@@ -54,6 +105,14 @@ void display(Context& ctx)
 	displayImGui();
 }
 
+void initializeTrackball(Context &ctx)
+{
+	double radius = double(std::min(ctx.global_settings.width, ctx.global_settings.height)) / 2.0;
+	ctx.trackball.radius = radius;
+	glm::vec2 center = glm::vec2(ctx.global_settings.width, ctx.global_settings.height) / 2.0f;
+	ctx.trackball.center = center;
+}
+
 void init(Context& ctx)
 {
 	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
@@ -64,7 +123,78 @@ void init(Context& ctx)
 	Mesh myMesh = manager.getMesh();
 	ctx.mesh = myMesh;
 	createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
+
+	initializeTrackball(ctx);
 }
+
+void mouseButtonPressed(Context *ctx, int button, int x, int y)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		ctx->trackball.center = glm::vec2(x, y);
+		trackballStartTracking(ctx->trackball, glm::vec2(x, y));
+	}
+}
+
+void mouseButtonReleased(Context *ctx, int button, int x, int y)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		trackballStopTracking(ctx->trackball);
+	}
+}
+
+void moveTrackball(Context *ctx, int x, int y)
+{
+	if (ctx->trackball.tracking) {
+		trackballMove(ctx->trackball, glm::vec2(x, y));
+	}
+}
+
+void resizeCallback(GLFWwindow* window, int width, int height)
+{
+	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+	ctx->global_settings.width = width;
+	ctx->global_settings.height = height;
+	ctx->trackball.radius = double(std::min(width, height)) / 2.0;
+	ctx->trackball.center = glm::vec2(width, height) / 2.0f;
+	glViewport(0, 0, width, height);
+}
+
+void cursorPosCallback(GLFWwindow* window, double x, double y)
+{
+	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+	moveTrackball(ctx, x, y);
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	double x, y;
+	glfwGetCursorPos(window, &x, &y);
+
+	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+	if (action == GLFW_PRESS) {
+		mouseButtonPressed(ctx, button, x, y);
+	}
+	else {
+		mouseButtonReleased(ctx, button, x, y);
+	}
+}
+
+void reloadShaders(Context *ctx)
+{
+	glDeleteProgram(ctx->shader_program);
+	ctx->shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
+		getExecPath() + "/shaders/mesh.frag");
+
+}
+
+void keyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
+{
+	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+		reloadShaders(ctx);
+	}
+}
+
 
 int main(void)
 {
@@ -82,6 +212,11 @@ int main(void)
 
 	glfwMakeContextCurrent(ctx.window);
 	glfwSetWindowUserPointer(ctx.window, &ctx);
+
+	glfwSetKeyCallback(ctx.window, keyCallback);
+	glfwSetMouseButtonCallback(ctx.window, mouseButtonCallback);
+	glfwSetCursorPosCallback(ctx.window, cursorPosCallback);
+	glfwSetFramebufferSizeCallback(ctx.window, resizeCallback);
 
 	// Load OpenGL functions
 	glewExperimental = true;

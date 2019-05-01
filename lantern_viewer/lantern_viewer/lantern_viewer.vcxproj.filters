@@ -101,6 +101,9 @@
     <ClInclude Include="assimp\assimp.h">
       <Filter>Source Files\assimp</Filter>
     </ClInclude>
+    <ClInclude Include="data_types\trackball.h">
+      <Filter>Source Files\data_types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
