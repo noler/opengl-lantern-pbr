@@ -54,26 +54,6 @@ bool ModelManager::assimpGetMeshData(const aiMesh* mesh)
 		meshData.normals.push_back(
 			glm::vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z)
 		);
-
-		/*vertexBuff.push_back(mesh->mVertices[v].x);
-		vertexBuff.push_back(mesh->mVertices[v].y);
-		vertexBuff.push_back(mesh->mVertices[v].z);*/
-
-		/*vertexBuff.push_back(mesh->mNormals[v].x);
-		vertexBuff.push_back(mesh->mNormals[v].y);
-		vertexBuff.push_back(mesh->mNormals[v].z);*/
-
-		/*
-		if (mesh->HasTextureCoords(0))
-		{
-			vertexBuff.push_back(mesh->mTextureCoords[0][v].x);
-			vertexBuff.push_back(mesh->mTextureCoords[0][v].y);
-		}
-		else
-		{
-			vertexBuff.push_back(0);
-			vertexBuff.push_back(0);
-		}*/
 	}
 
 	for (GLuint f = 0; f < mesh->mNumFaces; f++)
@@ -85,11 +65,6 @@ bool ModelManager::assimpGetMeshData(const aiMesh* mesh)
 			face->mIndices[1]);
 		meshData.indices.push_back(
 			face->mIndices[2]);
-		/*
-		indexBuff.push_back(face->mIndices[0]);
-		indexBuff.push_back(face->mIndices[1]);
-		indexBuff.push_back(face->mIndices[2]);
-		*/
 	}
 
 	return true;
