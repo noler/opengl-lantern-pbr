@@ -100,6 +100,7 @@ void display(Context& ctx)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST); // ensures that polygons overlap correctly
+	glEnable(GL_MULTISAMPLE);
 	drawMesh(ctx, ctx.shader_program, ctx.meshVAO);
 
 	displayImGui();
@@ -206,6 +207,7 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_SAMPLES, 8);
 
 	ctx.aspect = float(ctx.global_settings.width) / float(ctx.global_settings.height);
 	ctx.window = glfwCreateWindow(ctx.global_settings.width, ctx.global_settings.height, "Lantern Viewer", nullptr, nullptr);
