@@ -4,10 +4,9 @@
 
 layout(location = 0) in vec4 a_position;
 
-// uniform float u_time;
-uniform mat4 u_trans;
+uniform mat4 u_mvp;
 
-void main() {
-    gl_Position = a_position;
-
+void main() 
+{
+    gl_Position = u_mvp * a_position;
 }

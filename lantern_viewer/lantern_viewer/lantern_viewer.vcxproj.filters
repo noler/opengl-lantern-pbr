@@ -103,12 +103,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="..\x64\Debug\shaders\mesh.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\x64\Debug\shaders\mesh.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

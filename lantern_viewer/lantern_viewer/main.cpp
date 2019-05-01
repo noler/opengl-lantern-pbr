@@ -56,14 +56,11 @@ void display(Context& ctx)
 
 void init(Context& ctx)
 {
-	//ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
-	//                                getExecPath() + "/shaders/mesh.frag");
-
-	//loadMesh(getExecPath() + "/models/bunny.obj", &ctx.mesh);
-	//createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
+	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
+	                                getExecPath() + "/shaders/mesh.frag");
 
 	ModelManager manager;
-	manager.loadModel(getExecPath() + "/models/bunny.obj");
+	manager.loadModel(getExecPath() + "/models/lantern/lantern_obj.obj");
 	Mesh myMesh = manager.getMesh();
 	ctx.mesh = myMesh;
 	createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);

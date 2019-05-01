@@ -1,5 +1,6 @@
 #include "mesh.h"
 #include "../utils.h"
+#include <glm/gtc/type_ptr.hpp>
 
 // The attribute locations we will use in the vertex shader
 enum AttributeLocation {
@@ -57,15 +58,28 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO)
 {
 	glUseProgram(program);
 
-	// Define the model, view, and projection matrices here
-	// glm::mat4 model = glm::mat4(1.0f);
-	// glm::mat4 view = glm::mat4(1.0f);
-	// glm::mat4 projection = glm::mat4(1.0f);
+	glm::mat4 model = glm::mat4(1.0f);
+	
+	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
 
-	// Concatenate the model, view, and projection matrices to a
-	// ModelViewProjection (MVP) matrix and pass it as a uniform
-	// variable to the shader program
+	glm::mat4 view = glm::lookAt(
+		glm::vec3(4, 4, 3),
+		glm::vec3(0, 0, 0),
+		glm::vec3(0.8, 0.8, 0)
+	);
 
+
+	glm::mat4 projection =// glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.0f, 10.0f); 
+		glm::perspective(
+			glm::radians(90.0f),
+			ctx.aspect,
+			0.1f,
+			100.0f
+		);
+
+	glm::mat4 mvp = projection * view * model;
+	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),
+		1, GL_FALSE, glm::value_ptr(mvp));
 
 	glBindVertexArray(meshVAO.vao);
 	glDrawElements(GL_TRIANGLES, meshVAO.numIndices, GL_UNSIGNED_INT, 0);

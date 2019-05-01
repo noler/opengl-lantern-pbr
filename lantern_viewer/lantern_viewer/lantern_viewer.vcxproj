@@ -157,8 +157,8 @@
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.frag" />
-    <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.vert" />
+    <None Include="..\x64\Debug\shaders\mesh.frag" />
+    <None Include="..\x64\Debug\shaders\mesh.vert" />
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
