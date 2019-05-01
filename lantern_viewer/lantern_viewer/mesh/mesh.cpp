@@ -10,15 +10,6 @@ enum AttributeLocation
 	NORMAL = 1
 };
 
-void loadMesh(const std::string& filename, Mesh* mesh)
-{
-	OBJMesh obj_mesh;
-	objMeshLoad(obj_mesh, filename);
-	mesh->vertices = obj_mesh.vertices;
-	mesh->normals = obj_mesh.normals;
-	mesh->indices = obj_mesh.indices;
-}
-
 void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 {
 	// Generates and populates a VBO for the vertices
