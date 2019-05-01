@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="assimp\assimp.cpp" />
     <ClCompile Include="imgui\lib\imgui.cpp" />
     <ClCompile Include="imgui\lib\imgui_demo.cpp" />
     <ClCompile Include="imgui\lib\imgui_draw.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="assimp\assimp.h" />
     <ClInclude Include="data_types\context.h" />
     <ClInclude Include="data_types\global_settings.h" />
     <ClInclude Include="imgui\lib\imconfig.h" />
@@ -157,6 +159,7 @@
   <ItemGroup>
     <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.frag" />
     <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.vert" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "assimp/assimp.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -17,6 +19,8 @@
 #include "utils.h"
 
 #include "data_types/context.h"
+
+#include "assimp/assimp.h"
 
 #include "mesh/mesh.h"
 
@@ -52,10 +56,16 @@ void display(Context& ctx)
 
 void init(Context& ctx)
 {
-	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
-	                                getExecPath() + "/shaders/mesh.frag");
+	//ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
+	//                                getExecPath() + "/shaders/mesh.frag");
 
-	loadMesh(getExecPath() + "/models/bunny.obj", &ctx.mesh);
+	//loadMesh(getExecPath() + "/models/bunny.obj", &ctx.mesh);
+	//createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
+
+	ModelManager manager;
+	manager.loadModel(getExecPath() + "/models/bunny.obj");
+	Mesh myMesh = manager.getMesh();
+	ctx.mesh = myMesh;
 	createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
 }
 
@@ -85,7 +95,6 @@ int main(void)
 		std::exit(EXIT_FAILURE);
 	}
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-
 	// Initialize GUI
 	initImGui(ctx);
 
