@@ -3,17 +3,11 @@
 
 ModelManager::ModelManager()
 {
-	vertexBuff.clear();
-	indexBuff.clear();
-
 	meshData = Mesh();
-
-	std::cout << "++++++++++++ Mesh Manager Initilized +++++++++++++" << std::endl;
 }
 
 ModelManager::~ModelManager()
 {
-	std::cout << "------------ Mesh Manager Destroyed ------------" << std::endl;
 }
 
 bool ModelManager::loadModel(std::string filePath)
@@ -107,16 +101,6 @@ bool ModelManager::processData()
 		}
 	}
 	return true;
-}
-
-std::vector<float>* ModelManager::getVertexData()
-{
-	return &vertexBuff;
-}
-
-std::vector<GLuint>* ModelManager::getIndexData()
-{
-	return &indexBuff;
 }
 
 Mesh ModelManager::getMesh()

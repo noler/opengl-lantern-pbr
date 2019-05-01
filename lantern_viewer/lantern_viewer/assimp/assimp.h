@@ -22,8 +22,6 @@ public:
 	bool loadModel(std::string filePath);
 	bool processData();
 	Mesh getMesh();
-	std::vector<float>* getVertexData();
-	std::vector<GLuint>* getIndexData();
 
 private:
 	bool assimpGetMeshData(const aiMesh* mesh);
@@ -32,8 +30,7 @@ private:
 	const aiNode* modelNode;
 	const aiMesh* modelMesh;
 	const aiFace* modelFace;
-	std::vector<float> vertexBuff;
-	std::vector<GLuint> indexBuff;
+
 	Mesh meshData;
 
 	std::vector<const aiNode*> nodeBuff;
