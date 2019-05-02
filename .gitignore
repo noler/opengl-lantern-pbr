@@ -328,3 +328,7 @@ lantern_viewer/lantern_viewer/x64/Debug/imgui\.ini
 
 
 lantern_viewer/lantern_viewer/x64/Debug/lantern_viewer.tlog/
+lantern_viewer/lantern_viewer/imgui\.ini
+
+*.lastbuildstate
+*.idb

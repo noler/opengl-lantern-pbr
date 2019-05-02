@@ -2,10 +2,8 @@
 #version 150
 
 out vec4 frag_color;
-
-//uniform float u_time;
-uniform vec4 u_color;
+in vec3 v_color;
 
 void main() {
-    frag_color = vec4(0.5,0.5,0.5,1.0);
+    frag_color = vec4(v_color, 1.0);
 }

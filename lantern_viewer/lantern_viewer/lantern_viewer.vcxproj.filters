@@ -28,6 +28,9 @@
     <Filter Include="Source Files\mesh">
       <UniqueIdentifier>{30f851b6-a94e-4ecf-9096-79ca8ddb4226}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\assimp">
+      <UniqueIdentifier>{7e0a59d9-289a-498a-a6d0-07e5a632235d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="imgui\menu.cpp">
       <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="assimp\assimp.cpp">
+      <Filter>Source Files\assimp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,12 +98,19 @@
     <ClInclude Include="imgui\menu.h">
       <Filter>Source Files\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="assimp\assimp.h">
+      <Filter>Source Files\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="data_types\trackball.h">
+      <Filter>Source Files\data_types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.frag">
+    <None Include="ClassDiagram.cd" />
+    <None Include="..\x64\Debug\shaders\mesh.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="..\..\..\Users\Jonas\Documents\Kraken\assignment3\model_viewer\src\shaders\mesh.vert">
+    <None Include="..\x64\Debug\shaders\mesh.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
