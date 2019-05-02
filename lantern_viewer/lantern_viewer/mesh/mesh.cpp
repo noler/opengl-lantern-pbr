@@ -62,7 +62,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
 
 
 	glm::mat4 projection = glm::perspective(
-		glm::radians(90.0f),
+		glm::radians(static_cast<float>(ctx.zoomFactor)*90.0f),
 		ctx.aspect,
 		0.1f,
 		200.0f

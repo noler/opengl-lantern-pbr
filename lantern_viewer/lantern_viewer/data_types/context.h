@@ -44,5 +44,7 @@ struct Context
 
 	Trackball trackball;
 
+	double zoomFactor;
+
 	double elapsed_time;
 };

@@ -62,6 +62,8 @@ void initializeTrackball(Context& ctx)
 	ctx.trackball.center = center;
 }
 
+const double zoomStartValue = 1.0;
+
 void init(Context& ctx)
 {
 	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
@@ -74,6 +76,7 @@ void init(Context& ctx)
 	createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
 
 	initializeTrackball(ctx);
+	ctx.zoomFactor = zoomStartValue;
 }
 
 void mouseButtonPressed(Context* ctx, int button, int x, int y)
@@ -132,6 +135,25 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 		mouseButtonReleased(ctx, button, x, y);
 	}
 }
+const double minZoomFactor = 0.1;
+
+// maxZoom must be < 2
+const double maxZoomFactor = 1.9;
+// zoomStepFactor must be > 1
+double zoomStepFactor = 1.1;
+
+void scrollCallback(GLFWwindow* window, double x_offset, double y_offset)
+{
+	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+	if(y_offset < 0)
+	{
+		ctx->zoomFactor *= zoomStepFactor;
+	} else if (y_offset > 0)
+	{
+		ctx->zoomFactor /= zoomStepFactor;
+	}
+	ctx->zoomFactor = glm::clamp(ctx->zoomFactor, minZoomFactor, maxZoomFactor);
+}
 
 void reloadShaders(Context* ctx)
 {
@@ -173,6 +195,7 @@ int main(void)
 	glfwSetMouseButtonCallback(ctx.window, mouseButtonCallback);
 	glfwSetCursorPosCallback(ctx.window, cursorPosCallback);
 	glfwSetFramebufferSizeCallback(ctx.window, resizeCallback);
+	glfwSetScrollCallback(ctx.window, scrollCallback);
 
 	// Load OpenGL functions
 	glewExperimental = true;
