@@ -2,9 +2,27 @@
 #include <GLFW/glfw3.h>
 #include "global_settings.h"
 #include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <vector>
-#include "trackball.h"
 
+// Struct for trackball
+struct Trackball {
+	double radius;
+	glm::vec2 center;
+	bool tracking;
+	glm::vec3 vStart;
+	glm::quat qStart;
+	glm::quat qCurrent;
+
+	Trackball() : radius(1.0),
+		center(glm::vec2(0.0f, 0.0f)),
+		tracking(false),
+		vStart(glm::vec3(0.0f, 0.0f, 1.0f)),
+		qStart(glm::quat(1.0f, 0.0f, 0.0f, 0.0f)),
+		qCurrent(glm::quat(1.0f, 0.0f, 0.0f, 0.0f))
+	{}
+};
 
 // Struct for representing an indexed triangle mesh
 struct Mesh {

@@ -1,7 +1,7 @@
 #include "mesh.h"
 #include "../utils.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "../data_types/trackball.h"
+#include "../controls/trackball.h"
 
 // The attribute locations we will use in the vertex shader
 enum AttributeLocation

@@ -3,6 +3,15 @@
 #include <cmath>
 #include <algorithm>
 
+
+void initializeTrackball(Context& ctx)
+{
+	double radius = double(std::min(ctx.global_settings.width, ctx.global_settings.height)) / 2.0;
+	ctx.trackball.radius = radius;
+	glm::vec2 center = glm::vec2(ctx.global_settings.width, ctx.global_settings.height) / 2.0f;
+	ctx.trackball.center = center;
+}
+
 // Helper functions
 glm::vec3 mapMousePointToUnitSphere(glm::vec2 point, double radius, glm::vec2 center)
 {
@@ -34,6 +43,13 @@ void trackballStopTracking(Trackball& trackball)
 	trackball.tracking = false;
 }
 
+
+// Get trackball orientation in matrix form
+glm::mat4 trackballGetRotationMatrix(Trackball &trackball)
+{
+	return glm::mat4_cast(trackball.qCurrent);
+}
+
 // Rotate trackball from, e.g., mouse movement
 void trackballMove(Trackball& trackball, glm::vec2 point)
 {
@@ -56,8 +72,10 @@ void trackballMove(Trackball& trackball, glm::vec2 point)
 	}
 }
 
-// Get trackball orientation in matrix form
-glm::mat4 trackballGetRotationMatrix(Trackball &trackball)
+void moveTrackball(Context* ctx, int x, int y)
 {
-	return glm::mat4_cast(trackball.qCurrent);
+	if (ctx->trackball.tracking)
+	{
+		trackballMove(ctx->trackball, glm::vec2(x, y));
+	}
 }

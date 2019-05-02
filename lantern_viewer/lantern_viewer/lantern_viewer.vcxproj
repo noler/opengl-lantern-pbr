@@ -132,7 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assimp\assimp.cpp" />
-    <ClCompile Include="data_types\trackball.cpp" />
+    <ClCompile Include="controls\controls.cpp" />
+    <ClCompile Include="controls\trackball.cpp" />
     <ClCompile Include="imgui\lib\imgui.cpp" />
     <ClCompile Include="imgui\lib\imgui_demo.cpp" />
     <ClCompile Include="imgui\lib\imgui_draw.cpp" />
@@ -144,9 +145,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assimp\assimp.h" />
+    <ClInclude Include="controls\controls.h" />
+    <ClInclude Include="controls\trackball.h" />
     <ClInclude Include="data_types\context.h" />
     <ClInclude Include="data_types\global_settings.h" />
-    <ClInclude Include="data_types\trackball.h" />
     <ClInclude Include="imgui\lib\imconfig.h" />
     <ClInclude Include="imgui\lib\imgui.h" />
     <ClInclude Include="imgui\lib\imgui_impl_glfw_gl3.h" />

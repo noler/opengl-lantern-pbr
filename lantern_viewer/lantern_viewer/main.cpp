@@ -3,13 +3,10 @@
 
 #include "assimp/assimp.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include <cstdlib>
-#include <algorithm>
 #include <specstrings.h>
 #include <string>
 
@@ -18,14 +15,16 @@
 #include "utils.h"
 
 #include "data_types/context.h"
-#include "data_types/trackball.h"
 
 #include "mesh/mesh.h"
 
 #include "imgui/menu.h"
 
+#include "controls/controls.h"
+#include "controls/trackball.h"
 
 #include <boost/algorithm/string/replace.hpp>
+
 
 
 std::string getExecPath()
@@ -54,16 +53,6 @@ void display(Context& ctx)
 	displayImGui();
 }
 
-void initializeTrackball(Context& ctx)
-{
-	double radius = double(std::min(ctx.global_settings.width, ctx.global_settings.height)) / 2.0;
-	ctx.trackball.radius = radius;
-	glm::vec2 center = glm::vec2(ctx.global_settings.width, ctx.global_settings.height) / 2.0f;
-	ctx.trackball.center = center;
-}
-
-const double zoomStartValue = 1.0;
-
 void init(Context& ctx)
 {
 	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
@@ -77,82 +66,6 @@ void init(Context& ctx)
 
 	initializeTrackball(ctx);
 	ctx.zoomFactor = zoomStartValue;
-}
-
-void mouseButtonPressed(Context* ctx, int button, int x, int y)
-{
-	if (button == GLFW_MOUSE_BUTTON_LEFT)
-	{
-		ctx->trackball.center = glm::vec2(x, y);
-		trackballStartTracking(ctx->trackball, glm::vec2(x, y));
-	}
-}
-
-void mouseButtonReleased(Context* ctx, int button, int x, int y)
-{
-	if (button == GLFW_MOUSE_BUTTON_LEFT)
-	{
-		trackballStopTracking(ctx->trackball);
-	}
-}
-
-void moveTrackball(Context* ctx, int x, int y)
-{
-	if (ctx->trackball.tracking)
-	{
-		trackballMove(ctx->trackball, glm::vec2(x, y));
-	}
-}
-
-void resizeCallback(GLFWwindow* window, int width, int height)
-{
-	Context* ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
-	ctx->global_settings.width = width;
-	ctx->global_settings.height = height;
-	ctx->trackball.radius = double(std::min(width, height)) / 2.0;
-	ctx->trackball.center = glm::vec2(width, height) / 2.0f;
-	glViewport(0, 0, width, height);
-}
-
-void cursorPosCallback(GLFWwindow* window, double x, double y)
-{
-	Context* ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
-	moveTrackball(ctx, x, y);
-}
-
-void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
-	double x, y;
-	glfwGetCursorPos(window, &x, &y);
-
-	Context* ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
-	if (action == GLFW_PRESS)
-	{
-		mouseButtonPressed(ctx, button, x, y);
-	}
-	else
-	{
-		mouseButtonReleased(ctx, button, x, y);
-	}
-}
-const double minZoomFactor = 0.1;
-
-// maxZoom must be < 2
-const double maxZoomFactor = 1.9;
-// zoomStepFactor must be > 1
-double zoomStepFactor = 1.1;
-
-void scrollCallback(GLFWwindow* window, double x_offset, double y_offset)
-{
-	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
-	if(y_offset < 0)
-	{
-		ctx->zoomFactor *= zoomStepFactor;
-	} else if (y_offset > 0)
-	{
-		ctx->zoomFactor /= zoomStepFactor;
-	}
-	ctx->zoomFactor = glm::clamp(ctx->zoomFactor, minZoomFactor, maxZoomFactor);
 }
 
 void reloadShaders(Context* ctx)
