@@ -58,8 +58,8 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
 	glUseProgram(program);
 
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -20.0f, 0.0f));
 	model = model * trackballGetRotationMatrix(ctx.trackball);
+	model = glm::translate(model, glm::vec3(0.0f, -30.0f, 0.0f));
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(0, 0.0, 100.0),
 		glm::vec3(0, 0, 0),
