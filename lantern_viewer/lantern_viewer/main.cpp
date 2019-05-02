@@ -160,6 +160,7 @@ void resizeCallback(GLFWwindow* window, int width, int height)
 	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
 	ctx->global_settings.width = width;
 	ctx->global_settings.height = height;
+	ctx->aspect = float(ctx->global_settings.width) / float(ctx->global_settings.height);
 	ctx->trackball.radius = double(std::min(width, height)) / 2.0;
 	ctx->trackball.center = glm::vec2(width, height) / 2.0f;
 	glViewport(0, 0, width, height);
