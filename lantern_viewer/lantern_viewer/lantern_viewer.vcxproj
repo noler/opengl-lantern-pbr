@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assimp\assimp.cpp" />
+    <ClCompile Include="data_types\trackball.cpp" />
     <ClCompile Include="imgui\lib\imgui.cpp" />
     <ClCompile Include="imgui\lib\imgui_demo.cpp" />
     <ClCompile Include="imgui\lib\imgui_draw.cpp" />

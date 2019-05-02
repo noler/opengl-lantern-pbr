@@ -47,12 +47,6 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	meshVAO->numIndices = mesh.indices.size();
 }
 
-// Get trackball orientation in matrix form
-glm::mat4 trackballGetRotationMatrix(Trackball &trackball)
-{
-	return glm::mat4_cast(trackball.qCurrent);
-}
-
 void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
 {
 	glUseProgram(program);

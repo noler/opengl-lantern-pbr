@@ -60,6 +60,9 @@
     <ClCompile Include="assimp\assimp.cpp">
       <Filter>Source Files\assimp</Filter>
     </ClCompile>
+    <ClCompile Include="data_types\trackball.cpp">
+      <Filter>Source Files\data_types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.h">
