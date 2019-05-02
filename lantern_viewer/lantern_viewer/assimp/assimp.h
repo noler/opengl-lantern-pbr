@@ -21,17 +21,17 @@ public:
 
 	bool loadModel(std::string filePath);
 	bool processData();
-	Mesh getMesh();
+	std::vector<Mesh> getMesh();
 
 private:
-	bool assimpGetMeshData(const aiMesh* mesh);
+	Mesh assimpGetMeshData(const aiMesh* mesh);
 	Assimp::Importer importer;
 	const aiScene* modelScene;
 	const aiNode* modelNode;
 	const aiMesh* modelMesh;
 	const aiFace* modelFace;
 
-	Mesh meshData;
+	std::vector<Mesh> meshData;
 
 	std::vector<const aiNode*> nodeBuff;
 	GLuint numNodeBuff;

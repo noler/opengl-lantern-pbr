@@ -26,6 +26,7 @@ struct Trackball {
 struct Mesh {
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> textureCoordinate;
 	std::vector<uint32_t> indices;
 };
 
@@ -55,8 +56,11 @@ struct Context
 	GLuint colorVBO;
 	GLuint defaultVAO;
 
-	Mesh mesh;
-	MeshVAO meshVAO;
+	Mesh mesh1;
+	MeshVAO meshVAO1;
+
+	Mesh mesh2;
+	MeshVAO meshVAO2;
 
 	Trackball trackball;
 
