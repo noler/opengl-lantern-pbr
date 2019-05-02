@@ -62,9 +62,6 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 		}
 	}
 
-	//std::cout << "newMesh.vertices.size() " << newMesh.vertices.size() << std::endl;
-	//std::cout << "newMesh.textureCoordinate.size()" << newMesh.textureCoordinate.size() << std::endl;
-
 	for (GLuint f = 0; f < mesh->mNumFaces; f++)
 	{
 		face = &mesh->mFaces[f];
@@ -102,19 +99,6 @@ bool ModelManager::processData()
 			}
 		}
 	}
-	/*
-	for (GLuint i = 0; i < nodeBuff.size(); i++)
-	{
-		modelNode = nodeBuff.at(i);
-
-		if (modelNode->mNumMeshes > 0)
-		{
-			/*for (GLuint j = 0; j < modelNode->mNumMeshes; j++)
-			{
-				assimpGetMeshData(modelScene->mMeshes[0]);
-			}
-		}
-	}*/
 
 	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[0]));
 	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[1]));
