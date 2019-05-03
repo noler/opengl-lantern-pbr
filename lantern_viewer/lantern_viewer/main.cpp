@@ -48,7 +48,8 @@ void display(Context& ctx)
 
 	glEnable(GL_DEPTH_TEST); // ensures that polygons overlap correctly
 	glEnable(GL_MULTISAMPLE);
-	drawMesh(ctx, ctx.shader_program, ctx.meshVAO);
+	drawMesh(ctx, ctx.shader_program, ctx.meshVAO1);
+	drawMesh(ctx, ctx.shader_program, ctx.meshVAO2);
 
 	displayImGui();
 }
@@ -60,15 +61,19 @@ void init(Context& ctx)
 
 	ModelManager manager;
 	manager.loadModel(getExecPath() + "/models/lantern/lantern_obj.obj");
-	Mesh myMesh = manager.getMesh();
-	ctx.mesh = myMesh;
-	createMeshVAO(ctx, ctx.mesh, &ctx.meshVAO);
+	std::vector<Mesh> meshes = manager.getMesh();
+
+	ctx.mesh1 = meshes.at(0);
+	createMeshVAO(ctx, ctx.mesh1, &ctx.meshVAO1);
+
+	ctx.mesh2 = meshes.at(1);
+	createMeshVAO(ctx, ctx.mesh2, &ctx.meshVAO2);
 
 	initializeTrackball(ctx);
 	ctx.zoomFactor = zoomStartValue;
 }
 
-void reloadShaders(Context* ctx)
+void reloadShaders(Context *ctx)
 {
 	glDeleteProgram(ctx->shader_program);
 	ctx->shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
