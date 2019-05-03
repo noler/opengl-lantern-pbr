@@ -25,7 +25,7 @@
 
 #include <boost/algorithm/string/replace.hpp>
 
-
+#define TARGET_FPS 60.0
 
 std::string getExecPath()
 {
@@ -65,6 +65,11 @@ void initCamera(Context& ctx)
 void loadTextures(Context &ctx)
 {
 	ctx.lantern_obj.texture.albedo = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_albedo.png");
+	ctx.lantern_obj.texture.ambient_occlusion = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_ambient_occlusion.png");
+	ctx.lantern_obj.texture.metallic = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_metallic.png");
+	ctx.lantern_obj.texture.opacity = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_opacity.png");
+	ctx.lantern_obj.texture.roughness = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_roughness.png");
+	ctx.lantern_obj.texture.normal = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_normal.png");
 }
 
 void init(Context& ctx)
@@ -163,6 +168,7 @@ int main(void)
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	init(ctx);
 
+	double lasttime = glfwGetTime();
 	// Start rendering loop
 	while (!glfwWindowShouldClose(ctx.window))
 	{
@@ -170,6 +176,12 @@ int main(void)
 		ctx.elapsed_time = glfwGetTime();
 		display(ctx);
 		glfwSwapBuffers(ctx.window);
+
+		// FPS Limiter credit: https://github.com/glfw/glfw/issues/1308
+		while (glfwGetTime() < lasttime + 1.0 / TARGET_FPS) {
+			// TODO: Put the thread to sleep, yield, or simply do nothing
+		}
+		lasttime += 1.0 / TARGET_FPS;
 	}
 
 	// Shutdown

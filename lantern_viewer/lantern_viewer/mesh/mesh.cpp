@@ -47,9 +47,9 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	glEnableVertexAttribArray(NORMAL);
 	glVertexAttribPointer(NORMAL, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVAO->indexVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
 	glEnableVertexAttribArray(TEXTURE);
 	glVertexAttribPointer(TEXTURE, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
 	glBindVertexArray(ctx.defaultVAO); // unbinds the VAO
 
 	// Additional information required by draw calls
