@@ -6,11 +6,11 @@
 
 
 // maxZoomFactor must be < 2
-const double maxZoomFactor = 1.9;
+const float maxZoomFactor = 1.9;
 //minZoomFactor must be > 0
-const double minZoomFactor = 0.1;
+const float minZoomFactor = 0.1;
 
-const double zoomStartValue = 1.0;
+const float zoomStartValue = 1.0;
 
 void scrollCallback(GLFWwindow* window, double x_offset, double y_offset);
 

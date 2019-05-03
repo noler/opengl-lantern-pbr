@@ -47,28 +47,24 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	meshVAO->numIndices = mesh.indices.size();
 }
 
-void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
+void drawMeshes(Context& ctx)
+{
+	ctx.lantern_obj.model = glm::translate(trackballGetRotationMatrix(ctx.trackball), glm::vec3(0.0f, -30.0f, 0.0f));;
+
+	drawMesh(ctx, ctx.shader_lantern_base, ctx.lantern_obj.mesh_lantern_baseVAO, ctx.lantern_obj.model);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	drawMesh(ctx, ctx.shader_lantern_glass, ctx.lantern_obj.mesh_lantern_glassVAO, ctx.lantern_obj.model);
+
+}
+
+void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 model)
 {
 	glUseProgram(program);
+	
 
-	glm::mat4 model = glm::mat4(1.0f);
-	model = model * trackballGetRotationMatrix(ctx.trackball);
-	model = glm::translate(model, glm::vec3(0.0f, -30.0f, 0.0f));
-	glm::mat4 view = glm::lookAt(
-		glm::vec3(0, 0.0, 100.0),
-		glm::vec3(0, 0, 0),
-		glm::vec3(0.0, 1.0, 0.0)
-	);
-
-
-	glm::mat4 projection = glm::perspective(
-		glm::radians(static_cast<float>(ctx.zoomFactor)*90.0f),
-		ctx.aspect,
-		0.1f,
-		200.0f
-	);
-
-	glm::mat4 mvp = projection * view * model;
+	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),
 	                   1, GL_FALSE, glm::value_ptr(mvp));
 
@@ -77,4 +73,14 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
 	glBindVertexArray(ctx.defaultVAO);
 
 	glUseProgram(0);
+}
+
+void updateCamera(Context& ctx)
+{
+	ctx.camera.projection = glm::perspective(
+		glm::radians(ctx.camera.camera_projection.zoomFactor*90.0f),
+		ctx.aspect,
+		ctx.camera.camera_projection.zNear,
+		ctx.camera.camera_projection.zFar
+	);
 }

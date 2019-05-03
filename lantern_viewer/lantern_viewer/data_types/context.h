@@ -44,6 +44,31 @@ struct MeshVAO {
 	int numIndices;
 };
 
+struct LanternOBJ
+{
+	Mesh mesh_lantern_base;
+	MeshVAO mesh_lantern_baseVAO;
+
+	Mesh mesh_lantern_glass;
+	MeshVAO mesh_lantern_glassVAO;
+
+	glm::mat4 model = glm::mat4(1.0f);
+};
+
+struct CameraProjection
+{
+	float zNear;
+	float zFar;
+	float zoomFactor;
+};
+
+struct Camera
+{
+	glm::mat4 view;
+	glm::mat4 projection;
+	CameraProjection camera_projection;
+};
+
 struct Context
 {
 	GLFWwindow* window;
@@ -59,15 +84,10 @@ struct Context
 	GLuint colorVBO;
 	GLuint defaultVAO;
 
-	Mesh mesh_lantern_base;
-	MeshVAO mesh_lantern_baseVAO;
-
-	Mesh mesh_lantern_glass;
-	MeshVAO mesh_lantern_glassVAO;
+	Camera camera;
+	LanternOBJ lantern_obj;
 
 	Trackball trackball;
-
-	double zoomFactor;
 
 	double elapsed_time;
 };
