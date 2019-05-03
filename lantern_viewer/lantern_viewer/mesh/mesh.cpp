@@ -7,7 +7,8 @@
 enum AttributeLocation
 {
 	POSITION = 0,
-	NORMAL = 1
+	NORMAL = 1,
+	TEXTURE = 2
 };
 
 void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
@@ -30,6 +31,12 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	auto indicesNBytes = mesh.indices.size() * sizeof(mesh.indices[0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesNBytes, mesh.indices.data(), GL_STATIC_DRAW);
 
+	// Generates and populates a VBO for the texture coordinates
+	glGenBuffers(1, &(meshVAO->textureVBO));
+	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
+	auto textureNBytes = mesh.textureCoordinate.size() * sizeof(mesh.textureCoordinate[0]);
+	glBufferData(GL_ARRAY_BUFFER, textureNBytes, mesh.textureCoordinate.data(), GL_STATIC_DRAW);
+
 	// Creates a vertex array object (VAO) for drawing the mesh
 	glGenVertexArrays(1, &(meshVAO->vao));
 	glBindVertexArray(meshVAO->vao);
@@ -40,6 +47,9 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	glEnableVertexAttribArray(NORMAL);
 	glVertexAttribPointer(NORMAL, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVAO->indexVBO);
+	glEnableVertexAttribArray(TEXTURE);
+	glVertexAttribPointer(TEXTURE, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
 	glBindVertexArray(ctx.defaultVAO); // unbinds the VAO
 
 	// Additional information required by draw calls
@@ -62,7 +72,9 @@ void drawMeshes(Context& ctx)
 void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 model)
 {
 	glUseProgram(program);
-	
+
+	glActiveTexture(ctx.lantern_obj.texture.albedo);
+	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.albedo);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),

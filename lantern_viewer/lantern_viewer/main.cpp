@@ -62,6 +62,11 @@ void initCamera(Context& ctx)
 	ctx.camera.camera_projection.zFar = 200.0f;
 }
 
+void loadTextures(Context &ctx)
+{
+	ctx.lantern_obj.texture.albedo = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_albedo.png");
+}
+
 void init(Context& ctx)
 {
 	initializeTrackball(ctx);
@@ -72,6 +77,7 @@ void init(Context& ctx)
 	ctx.shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
 		getExecPath() + "/shaders/mesh_glass.frag");
 
+	loadTextures(ctx);
 
 	ctx.camera.view = glm::lookAt(
 		glm::vec3(0, 0.0, 100.0),
