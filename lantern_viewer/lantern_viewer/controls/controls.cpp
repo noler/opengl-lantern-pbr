@@ -48,6 +48,7 @@ void resizeCallback(GLFWwindow* window, int width, int height)
 	ctx->global_settings.height = height;
 	ctx->trackball.radius = double(std::min(width, height)) / 2.0;
 	ctx->trackball.center = glm::vec2(width, height) / 2.0f;
+	ctx->aspect = float(ctx->global_settings.width) / float(ctx->global_settings.height);
 	glViewport(0, 0, width, height);
 }
 
