@@ -2,6 +2,7 @@
 #include "trackball.h"
 #include <algorithm>
 #include "../utils.h"
+#include "../mesh/mesh.h"
 
 // zoomStepFactor must be > 1
 double zoomStepFactor = 1.1;
@@ -11,13 +12,15 @@ void scrollCallback(GLFWwindow* window, double x_offset, double y_offset)
 	Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
 	if (y_offset < 0)
 	{
-		ctx->zoomFactor *= zoomStepFactor;
+		ctx->camera.camera_projection.zoomFactor *= zoomStepFactor;
 	}
 	else if (y_offset > 0)
 	{
-		ctx->zoomFactor /= zoomStepFactor;
+		ctx->camera.camera_projection.zoomFactor /= zoomStepFactor;
 	}
-	ctx->zoomFactor = glm::clamp(ctx->zoomFactor, minZoomFactor, maxZoomFactor);
+	ctx->camera.camera_projection.zoomFactor = glm::clamp(ctx->camera.camera_projection.zoomFactor, minZoomFactor, maxZoomFactor);
+
+	updateCamera(*ctx);
 }
 
 void mouseButtonPressed(Context* ctx, int button, int x, int y)

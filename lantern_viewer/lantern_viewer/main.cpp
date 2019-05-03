@@ -49,35 +49,49 @@ void display(Context& ctx)
 	glEnable(GL_DEPTH_TEST); // ensures that polygons overlap correctly
 	glEnable(GL_MULTISAMPLE);
 
-	drawMesh(ctx, ctx.shader_lantern_base, ctx.mesh_lantern_baseVAO);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	drawMesh(ctx, ctx.shader_lantern_glass, ctx.mesh_lantern_glassVAO);
+	drawMeshes(ctx);
 
 	displayImGui();
 }
 
+// Must be called at least once before cameraUpdate()
+void initCamera(Context& ctx)
+{
+	ctx.camera.camera_projection.zoomFactor = 1.0f;
+	ctx.camera.camera_projection.zNear = 0.1f;
+	ctx.camera.camera_projection.zFar = 200.0f;
+}
+
 void init(Context& ctx)
 {
+	initializeTrackball(ctx);
+
 	ctx.shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
 	                                getExecPath() + "/shaders/mesh_base.frag");
 
 	ctx.shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
 		getExecPath() + "/shaders/mesh_glass.frag");
 
+
+	ctx.camera.view = glm::lookAt(
+		glm::vec3(0, 0.0, 100.0),
+		glm::vec3(0, 0, 0),
+		glm::vec3(0.0, 1.0, 0.0)
+	);
+
+	initCamera(ctx);
+	updateCamera(ctx);
+
+
 	ModelManager manager;
 	manager.loadModel(getExecPath() + "/models/lantern/lantern_obj.obj");
 	std::vector<Mesh> meshes = manager.getMesh();
 
-	ctx.mesh_lantern_base = meshes.at(0);
-	createMeshVAO(ctx, ctx.mesh_lantern_base, &ctx.mesh_lantern_baseVAO);
+	ctx.lantern_obj.mesh_lantern_base = meshes.at(0);
+	createMeshVAO(ctx, ctx.lantern_obj.mesh_lantern_base, &ctx.lantern_obj.mesh_lantern_baseVAO);
 
-	ctx.mesh_lantern_glass = meshes.at(1);
-	createMeshVAO(ctx, ctx.mesh_lantern_glass, &ctx.mesh_lantern_glassVAO);
-	
-	initializeTrackball(ctx);
-	ctx.zoomFactor = zoomStartValue;
+	ctx.lantern_obj.mesh_lantern_glass = meshes.at(1);
+	createMeshVAO(ctx, ctx.lantern_obj.mesh_lantern_glass, &ctx.lantern_obj.mesh_lantern_glassVAO);
 }
 
 void reloadShaders(Context *ctx)
