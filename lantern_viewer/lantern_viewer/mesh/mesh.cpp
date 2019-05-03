@@ -40,16 +40,22 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	// Creates a vertex array object (VAO) for drawing the mesh
 	glGenVertexArrays(1, &(meshVAO->vao));
 	glBindVertexArray(meshVAO->vao);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->vertexVBO);
 	glEnableVertexAttribArray(POSITION);
 	glVertexAttribPointer(POSITION, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
 	glEnableVertexAttribArray(NORMAL);
 	glVertexAttribPointer(NORMAL, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVAO->indexVBO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
 	glEnableVertexAttribArray(TEXTURE);
 	glVertexAttribPointer(TEXTURE, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	
+	
 	glBindVertexArray(ctx.defaultVAO); // unbinds the VAO
 
 	// Additional information required by draw calls
