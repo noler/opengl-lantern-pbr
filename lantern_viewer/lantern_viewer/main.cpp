@@ -24,6 +24,7 @@
 #include "controls/trackball.h"
 
 #include <boost/algorithm/string/replace.hpp>
+#include <imgui.h>
 
 #define TARGET_FPS 60.0
 
@@ -137,8 +138,10 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
+	std::string title = "Lantern Viewer";
+
 	ctx.aspect = float(ctx.global_settings.width) / float(ctx.global_settings.height);
-	ctx.window = glfwCreateWindow(ctx.global_settings.width, ctx.global_settings.height, "Lantern Viewer", nullptr,
+	ctx.window = glfwCreateWindow(ctx.global_settings.width, ctx.global_settings.height, title.c_str(), nullptr,
 	                              nullptr);
 
 	glfwMakeContextCurrent(ctx.window);
@@ -174,9 +177,11 @@ int main(void)
 	{
 		glfwPollEvents();
 		ctx.elapsed_time = glfwGetTime();
+
 		display(ctx);
 		glfwSwapBuffers(ctx.window);
-
+		glfwSetWindowTitle(ctx.window, (title + " (FPS: " + std::to_string((int)round(ImGui::GetIO().Framerate)) + ")").c_str());
+		
 		// FPS Limiter credit: https://github.com/glfw/glfw/issues/1308
 		while (glfwGetTime() < lasttime + 1.0 / TARGET_FPS) {
 			// TODO: Put the thread to sleep, yield, or simply do nothing
