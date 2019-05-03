@@ -34,6 +34,9 @@
     <Filter Include="Source Files\controls">
       <UniqueIdentifier>{5adb42f9-1f84-4cb7-b17d-77e5055c09bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\lodepng">
+      <UniqueIdentifier>{d9bd7c38-51af-4281-a86e-3a6ba141503e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="controls\trackball.cpp">
       <Filter>Source Files\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="lodepng\lodepng.cpp">
+      <Filter>Source Files\lodepng</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="controls\trackball.h">
       <Filter>Source Files\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="lodepng\lodepng.h">
+      <Filter>Source Files\lodepng</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
