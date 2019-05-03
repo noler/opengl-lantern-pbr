@@ -77,6 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)external\glew\include;$(SolutionDir)external\glm;$(SolutionDir)external\glfw\include;$(SolutionDir)external\imgui;$(SolutionDir)external\boost_1_68_0;$(SolutionDir)external\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)external\assimp\lib64;$(SolutionDir)external\glfw\lib-vc2017;$(SolutionDir)external\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -90,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)external\glew\include;$(SolutionDir)external\glm;$(SolutionDir)external\glfw\include;$(SolutionDir)external\imgui;$(SolutionDir)external\boost_1_68_0;$(SolutionDir)external\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)external\assimp\lib64;$(SolutionDir)external\glfw\lib-vc2017;$(SolutionDir)external\glew\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -105,6 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)external\glew\include;$(SolutionDir)external\glm;$(SolutionDir)external\glfw\include;$(SolutionDir)external\imgui;$(SolutionDir)external\boost_1_68_0;$(SolutionDir)external\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -122,6 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)external\glew\include;$(SolutionDir)external\glm;$(SolutionDir)external\glfw\include;$(SolutionDir)external\imgui;$(SolutionDir)external\boost_1_68_0;$(SolutionDir)external\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -139,6 +143,7 @@
     <ClCompile Include="imgui\lib\imgui_draw.cpp" />
     <ClCompile Include="imgui\lib\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="imgui\menu.cpp" />
+    <ClCompile Include="lodepng\lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh\mesh.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -157,6 +162,7 @@
     <ClInclude Include="imgui\lib\stb_textedit.h" />
     <ClInclude Include="imgui\lib\stb_truetype.h" />
     <ClInclude Include="imgui\menu.h" />
+    <ClInclude Include="lodepng\lodepng.h" />
     <ClInclude Include="mesh\mesh.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
