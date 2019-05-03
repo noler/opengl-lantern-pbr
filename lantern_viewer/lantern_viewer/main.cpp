@@ -48,36 +48,46 @@ void display(Context& ctx)
 
 	glEnable(GL_DEPTH_TEST); // ensures that polygons overlap correctly
 	glEnable(GL_MULTISAMPLE);
-	drawMesh(ctx, ctx.shader_program, ctx.meshVAO1);
-	drawMesh(ctx, ctx.shader_program, ctx.meshVAO2);
+
+	drawMesh(ctx, ctx.shader_lantern_base, ctx.mesh_lantern_baseVAO);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	drawMesh(ctx, ctx.shader_lantern_glass, ctx.mesh_lantern_glassVAO);
 
 	displayImGui();
 }
 
 void init(Context& ctx)
 {
-	ctx.shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
-	                                       getExecPath() + "/shaders/mesh.frag");
+	ctx.shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
+	                                getExecPath() + "/shaders/mesh_base.frag");
+
+	ctx.shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
+		getExecPath() + "/shaders/mesh_glass.frag");
 
 	ModelManager manager;
 	manager.loadModel(getExecPath() + "/models/lantern/lantern_obj.obj");
 	std::vector<Mesh> meshes = manager.getMesh();
 
-	ctx.mesh1 = meshes.at(0);
-	createMeshVAO(ctx, ctx.mesh1, &ctx.meshVAO1);
+	ctx.mesh_lantern_base = meshes.at(0);
+	createMeshVAO(ctx, ctx.mesh_lantern_base, &ctx.mesh_lantern_baseVAO);
 
-	ctx.mesh2 = meshes.at(1);
-	createMeshVAO(ctx, ctx.mesh2, &ctx.meshVAO2);
-
+	ctx.mesh_lantern_glass = meshes.at(1);
+	createMeshVAO(ctx, ctx.mesh_lantern_glass, &ctx.mesh_lantern_glassVAO);
+	
 	initializeTrackball(ctx);
 	ctx.zoomFactor = zoomStartValue;
 }
 
 void reloadShaders(Context *ctx)
 {
-	glDeleteProgram(ctx->shader_program);
-	ctx->shader_program = loadShaderProgram(getExecPath() + "/shaders/mesh.vert",
-	                                        getExecPath() + "/shaders/mesh.frag");
+	glDeleteProgram(ctx->shader_lantern_base);
+	ctx->shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
+		getExecPath() + "/shaders/mesh_base.frag");
+
+	ctx->shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
+		getExecPath() + "/shaders/mesh_glass.frag");
 }
 
 void keyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)

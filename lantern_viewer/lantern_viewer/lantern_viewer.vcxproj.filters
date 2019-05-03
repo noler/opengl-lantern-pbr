@@ -119,10 +119,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="..\x64\Debug\shaders\mesh.frag">
+    <None Include="..\x64\Debug\shaders\mesh_base.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="..\x64\Debug\shaders\mesh.vert">
+    <None Include="..\x64\Debug\shaders\mesh_base.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\x64\Debug\shaders\mesh_glass.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\x64\Debug\shaders\mesh_glass.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

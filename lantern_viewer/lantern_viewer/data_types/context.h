@@ -47,7 +47,8 @@ struct MeshVAO {
 struct Context
 {
 	GLFWwindow* window;
-	GLuint shader_program;
+	GLuint shader_lantern_base;
+	GLuint shader_lantern_glass;
 
 	GlobalSettings global_settings;
 
@@ -58,11 +59,11 @@ struct Context
 	GLuint colorVBO;
 	GLuint defaultVAO;
 
-	Mesh mesh1;
-	MeshVAO meshVAO1;
+	Mesh mesh_lantern_base;
+	MeshVAO mesh_lantern_baseVAO;
 
-	Mesh mesh2;
-	MeshVAO meshVAO2;
+	Mesh mesh_lantern_glass;
+	MeshVAO mesh_lantern_glassVAO;
 
 	Trackball trackball;
 

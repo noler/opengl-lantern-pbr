@@ -78,28 +78,6 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 
 bool ModelManager::processData()
 {
-	bool repeat = true;
-	nodeBuff.push_back(modelScene->mRootNode);
-
-	while (repeat)
-	{
-		for (GLuint i = 0; i < nodeBuff.size(); i++)
-		{
-			modelNode = nodeBuff.at(i);
-			if (modelNode->mNumChildren > 0)
-			{
-				for (GLuint c = 0; c < modelNode->mNumChildren; c++)
-				{
-					nodeBuff.push_back(modelNode->mChildren[c]);
-				}
-			}
-			else
-			{
-				repeat = false;
-			}
-		}
-	}
-
 	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[0]));
 	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[1]));
 
