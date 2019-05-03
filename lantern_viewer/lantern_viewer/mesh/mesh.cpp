@@ -1,7 +1,7 @@
 #include "mesh.h"
 #include "../utils.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "../data_types/trackball.h"
+#include "../controls/trackball.h"
 
 // The attribute locations we will use in the vertex shader
 enum AttributeLocation
@@ -47,19 +47,13 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	meshVAO->numIndices = mesh.indices.size();
 }
 
-// Get trackball orientation in matrix form
-glm::mat4 trackballGetRotationMatrix(Trackball &trackball)
-{
-	return glm::mat4_cast(trackball.qCurrent);
-}
-
 void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
 {
 	glUseProgram(program);
 
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, -20.0f, 0.0f));
 	model = model * trackballGetRotationMatrix(ctx.trackball);
+	model = glm::translate(model, glm::vec3(0.0f, -30.0f, 0.0f));
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(0, 0.0, 100.0),
 		glm::vec3(0, 0, 0),
@@ -68,7 +62,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO)
 
 
 	glm::mat4 projection = glm::perspective(
-		glm::radians(90.0f),
+		glm::radians(static_cast<float>(ctx.zoomFactor)*90.0f),
 		ctx.aspect,
 		0.1f,
 		200.0f

@@ -2,9 +2,11 @@
 #include <GLFW/glfw3.h>
 #include "global_settings.h"
 #include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <vector>
-#include "trackball.h"
 
+// Struct for trackball
 struct Trackball {
 	double radius;
 	glm::vec2 center;
@@ -63,6 +65,8 @@ struct Context
 	MeshVAO meshVAO2;
 
 	Trackball trackball;
+
+	double zoomFactor;
 
 	double elapsed_time;
 };
