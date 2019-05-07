@@ -12,3 +12,7 @@ void drawMesh(Context &ctx, GLuint program, const MeshVAO &meshVAO, glm::mat4 mo
 void drawMeshes(Context& ctx);
 
 void updateCamera(Context& ctx);
+
+void createCube(Context& ctx);
+
+void drawCubeSkybox(Context& ctx);

@@ -7,7 +7,8 @@
 #include <vector>
 
 // Struct for trackball
-struct Trackball {
+struct Trackball
+{
 	double radius;
 	glm::vec2 center;
 	bool tracking;
@@ -16,16 +17,28 @@ struct Trackball {
 	glm::quat qCurrent;
 
 	Trackball() : radius(1.0),
-		center(glm::vec2(0.0f, 0.0f)),
-		tracking(false),
-		vStart(glm::vec3(0.0f, 0.0f, 1.0f)),
-		qStart(glm::quat(1.0f, 0.0f, 0.0f, 0.0f)),
-		qCurrent(glm::quat(1.0f, 0.0f, 0.0f, 0.0f))
-	{}
+	              center(glm::vec2(0.0f, 0.0f)),
+	              tracking(false),
+	              vStart(glm::vec3(0.0f, 0.0f, 1.0f)),
+	              qStart(glm::quat(1.0f, 0.0f, 0.0f, 0.0f)),
+	              qCurrent(glm::quat(1.0f, 0.0f, 0.0f, 0.0f))
+	{
+	}
+};
+
+struct Texture
+{
+	GLuint albedo;
+	GLuint ambient_occlusion;
+	GLuint metallic;
+	GLuint normal;
+	GLuint opacity;
+	GLuint roughness;
 };
 
 // Struct for representing an indexed triangle mesh
-struct Mesh {
+struct Mesh
+{
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> textureCoordinate;
@@ -35,11 +48,13 @@ struct Mesh {
 
 // Struct for representing a vertex array object (VAO) created from a
 // mesh. Used for rendering.
-struct MeshVAO {
+struct MeshVAO
+{
 	GLuint vao;
 	GLuint vertexVBO;
 	GLuint normalVBO;
 	GLuint indexVBO;
+	GLuint textureVBO;
 	int numVertices;
 	int numIndices;
 };
@@ -51,6 +66,8 @@ struct LanternOBJ
 
 	Mesh mesh_lantern_glass;
 	MeshVAO mesh_lantern_glassVAO;
+
+	Texture texture;
 
 	glm::mat4 model = glm::mat4(1.0f);
 };
@@ -69,11 +86,21 @@ struct Camera
 	CameraProjection camera_projection;
 };
 
+struct SkyboxOBJ
+{
+	GLuint skyboxIBO;
+	GLuint skyboxVBO;
+	GLuint skyboxVAO;
+
+	GLuint skybox_cubemap;
+};
+
 struct Context
 {
 	GLFWwindow* window;
 	GLuint shader_lantern_base;
 	GLuint shader_lantern_glass;
+	GLuint shader_skybox;
 
 	GlobalSettings global_settings;
 
@@ -86,6 +113,8 @@ struct Context
 
 	Camera camera;
 	LanternOBJ lantern_obj;
+	
+	SkyboxOBJ skybox_obj;
 
 	Trackball trackball;
 

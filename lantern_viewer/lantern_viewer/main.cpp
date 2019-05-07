@@ -24,8 +24,9 @@
 #include "controls/trackball.h"
 
 #include <boost/algorithm/string/replace.hpp>
+#include <imgui.h>
 
-
+#define TARGET_FPS 60.0
 
 std::string getExecPath()
 {
@@ -59,12 +60,28 @@ void initCamera(Context& ctx)
 {
 	ctx.camera.camera_projection.zoomFactor = 1.0f;
 	ctx.camera.camera_projection.zNear = 0.1f;
-	ctx.camera.camera_projection.zFar = 200.0f;
+	ctx.camera.camera_projection.zFar = 500.0f;
+}
+
+void loadTextures(Context &ctx)
+{
+	ctx.lantern_obj.texture.albedo = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_albedo.png");
+	ctx.lantern_obj.texture.ambient_occlusion = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_ambient_occlusion.png");
+	ctx.lantern_obj.texture.metallic = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_metallic.png");
+	ctx.lantern_obj.texture.opacity = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_opacity.png");
+	ctx.lantern_obj.texture.roughness = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_roughness.png");
+	ctx.lantern_obj.texture.normal = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_normal.png");
+}
+
+void loadCubemaps(Context &ctx)
+{
+	ctx.skybox_obj.skybox_cubemap = loadCubemap(getExecPath() + "/cubemaps/Lycksele2/");
 }
 
 void init(Context& ctx)
 {
 	initializeTrackball(ctx);
+	createCube(ctx);
 
 	ctx.shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
 	                                getExecPath() + "/shaders/mesh_base.frag");
@@ -72,6 +89,11 @@ void init(Context& ctx)
 	ctx.shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
 		getExecPath() + "/shaders/mesh_glass.frag");
 
+	ctx.shader_skybox = loadShaderProgram(getExecPath() + "/shaders/skybox_cube.vert",
+		getExecPath() + "/shaders/skybox_cube.frag");
+
+	loadTextures(ctx);
+	loadCubemaps(ctx);
 
 	ctx.camera.view = glm::lookAt(
 		glm::vec3(0, 0.0, 100.0),
@@ -100,8 +122,13 @@ void reloadShaders(Context *ctx)
 	ctx->shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
 		getExecPath() + "/shaders/mesh_base.frag");
 
+	glDeleteProgram(ctx->shader_lantern_glass);
 	ctx->shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
 		getExecPath() + "/shaders/mesh_glass.frag");
+
+	glDeleteProgram(ctx->shader_skybox);
+	ctx->shader_skybox = loadShaderProgram(getExecPath() + "/shaders/skybox_cube.vert",
+		getExecPath() + "/shaders/skybox_cube.frag");
 }
 
 void keyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
@@ -126,8 +153,10 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
+	std::string title = "Lantern Viewer";
+
 	ctx.aspect = float(ctx.global_settings.width) / float(ctx.global_settings.height);
-	ctx.window = glfwCreateWindow(ctx.global_settings.width, ctx.global_settings.height, "Lantern Viewer", nullptr,
+	ctx.window = glfwCreateWindow(ctx.global_settings.width, ctx.global_settings.height, title.c_str(), nullptr,
 	                              nullptr);
 
 	glfwMakeContextCurrent(ctx.window);
@@ -157,13 +186,22 @@ int main(void)
 	//glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	init(ctx);
 
+	double lasttime = glfwGetTime();
 	// Start rendering loop
 	while (!glfwWindowShouldClose(ctx.window))
 	{
 		glfwPollEvents();
 		ctx.elapsed_time = glfwGetTime();
+
 		display(ctx);
 		glfwSwapBuffers(ctx.window);
+		glfwSetWindowTitle(ctx.window, (title + " (FPS: " + std::to_string((int)round(ImGui::GetIO().Framerate)) + ")").c_str());
+		
+		// FPS Limiter credit: https://github.com/glfw/glfw/issues/1308
+		while (glfwGetTime() < lasttime + 1.0 / TARGET_FPS) {
+			// TODO: Put the thread to sleep, yield, or simply do nothing
+		}
+		lasttime += 1.0 / TARGET_FPS;
 	}
 
 	// Shutdown
