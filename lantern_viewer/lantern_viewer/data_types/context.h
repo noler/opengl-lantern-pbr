@@ -86,11 +86,21 @@ struct Camera
 	CameraProjection camera_projection;
 };
 
+struct SkyboxOBJ
+{
+	GLuint skyboxIBO;
+	GLuint skyboxVBO;
+	GLuint skyboxVAO;
+
+	GLuint skybox_cubemap;
+};
+
 struct Context
 {
 	GLFWwindow* window;
 	GLuint shader_lantern_base;
 	GLuint shader_lantern_glass;
+	GLuint shader_skybox;
 
 	GlobalSettings global_settings;
 
@@ -103,6 +113,8 @@ struct Context
 
 	Camera camera;
 	LanternOBJ lantern_obj;
+	
+	SkyboxOBJ skybox_obj;
 
 	Trackball trackball;
 

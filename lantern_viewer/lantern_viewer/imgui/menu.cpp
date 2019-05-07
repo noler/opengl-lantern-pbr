@@ -16,7 +16,6 @@ void displayImGui()
 {
 	bool dummy[] = { true };
 	ImGui_ImplGlfwGL3_NewFrame();
-	ImGui::Begin("This is a title", dummy);
 	ImGui::Text("Magnus is cool");
 	ImGui::Checkbox("Check me", dummy);
 
@@ -28,8 +27,6 @@ void displayImGui()
 		ImGui::Text("Max FPS %.1f FPS", max_fps);
 
 	}
-
-	ImGui::End();
 
 	ImGui::Render();
 }

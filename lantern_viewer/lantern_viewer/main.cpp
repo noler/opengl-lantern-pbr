@@ -60,7 +60,7 @@ void initCamera(Context& ctx)
 {
 	ctx.camera.camera_projection.zoomFactor = 1.0f;
 	ctx.camera.camera_projection.zNear = 0.1f;
-	ctx.camera.camera_projection.zFar = 200.0f;
+	ctx.camera.camera_projection.zFar = 500.0f;
 }
 
 void loadTextures(Context &ctx)
@@ -73,9 +73,15 @@ void loadTextures(Context &ctx)
 	ctx.lantern_obj.texture.normal = load2DTexture(getExecPath() + "/models/lantern/textures/png/lantern_normal.png");
 }
 
+void loadCubemaps(Context &ctx)
+{
+	ctx.skybox_obj.skybox_cubemap = loadCubemap(getExecPath() + "/cubemaps/Lycksele2/");
+}
+
 void init(Context& ctx)
 {
 	initializeTrackball(ctx);
+	createCube(ctx);
 
 	ctx.shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
 	                                getExecPath() + "/shaders/mesh_base.frag");
@@ -83,7 +89,11 @@ void init(Context& ctx)
 	ctx.shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
 		getExecPath() + "/shaders/mesh_glass.frag");
 
+	ctx.shader_skybox = loadShaderProgram(getExecPath() + "/shaders/skybox_cube.vert",
+		getExecPath() + "/shaders/skybox_cube.frag");
+
 	loadTextures(ctx);
+	loadCubemaps(ctx);
 
 	ctx.camera.view = glm::lookAt(
 		glm::vec3(0, 0.0, 100.0),
@@ -112,8 +122,13 @@ void reloadShaders(Context *ctx)
 	ctx->shader_lantern_base = loadShaderProgram(getExecPath() + "/shaders/mesh_base.vert",
 		getExecPath() + "/shaders/mesh_base.frag");
 
+	glDeleteProgram(ctx->shader_lantern_glass);
 	ctx->shader_lantern_glass = loadShaderProgram(getExecPath() + "/shaders/mesh_glass.vert",
 		getExecPath() + "/shaders/mesh_glass.frag");
+
+	glDeleteProgram(ctx->shader_skybox);
+	ctx->shader_skybox = loadShaderProgram(getExecPath() + "/shaders/skybox_cube.vert",
+		getExecPath() + "/shaders/skybox_cube.frag");
 }
 
 void keyCallback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
