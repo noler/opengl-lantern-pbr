@@ -6,7 +6,7 @@
 
 
 // maxZoomFactor must be < 2
-const float maxZoomFactor = 1.9;
+const float maxZoomFactor = 1.5;
 //minZoomFactor must be > 0
 const float minZoomFactor = 0.1;
 
