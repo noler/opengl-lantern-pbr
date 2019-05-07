@@ -82,8 +82,30 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 {
 	glUseProgram(program);
 
-	glActiveTexture(ctx.lantern_obj.texture.albedo);
+	glUniform1i(glGetUniformLocation(program, "albedoTex"), 0);
+	glUniform1i(glGetUniformLocation(program, "ambientOcclusionTex"), 1);
+	glUniform1i(glGetUniformLocation(program, "metallicTex"), 2);
+	glUniform1i(glGetUniformLocation(program, "normalTex"), 3);
+	glUniform1i(glGetUniformLocation(program, "OpacityTex"), 4);
+	glUniform1i(glGetUniformLocation(program, "RoughnessTex"), 5);
+
+	glActiveTexture(GL_TEXTURE0 + 0);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.albedo);
+
+	glActiveTexture(GL_TEXTURE0 + 1);
+	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.ambient_occlusion);
+
+	glActiveTexture(GL_TEXTURE0 + 2);
+	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.metallic);
+
+	glActiveTexture(GL_TEXTURE0 + 3);
+	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.normal);
+
+	glActiveTexture(GL_TEXTURE0 + 4);
+	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.opacity);
+
+	glActiveTexture(GL_TEXTURE0 + 5);
+	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.roughness);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),
