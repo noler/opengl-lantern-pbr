@@ -107,7 +107,14 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glActiveTexture(GL_TEXTURE0 + 5);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.roughness);
 
-	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
+	glActiveTexture(ctx.skybox_obj.skybox_cubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap);
+
+	glm::mat4 mv = ctx.camera.view * model;
+	glm::mat4 mvp = ctx.camera.projection * mv;
+	
+	glUniformMatrix4fv(glGetUniformLocation(program, "u_mv"),
+		1, GL_FALSE, glm::value_ptr(mv));
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),
 	                   1, GL_FALSE, glm::value_ptr(mvp));
 
