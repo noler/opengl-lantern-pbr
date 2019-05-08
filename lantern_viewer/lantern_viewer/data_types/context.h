@@ -93,6 +93,7 @@ struct SkyboxOBJ
 	GLuint skyboxVAO;
 
 	GLuint skybox_cubemap;
+	GLuint skybox_cubemap_mipmap;
 };
 
 struct Context

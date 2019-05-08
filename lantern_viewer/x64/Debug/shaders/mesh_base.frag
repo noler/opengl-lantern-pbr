@@ -21,10 +21,20 @@ uniform samplerCube u_cubemap;
 void main() {
 	vec3 ambient_occlusion = texture(ambientOcclusionTex, v_texture).xyz;
 	vec3 albedo = texture(albedoTex, v_texture).xyz;
-	
+	float roughness = texture(RoughnessTex, v_texture).r;
+	float metallic = texture(metallicTex, v_texture).r;
+	vec3 normal = texture(normalTex, v_texture).rgb;
+
+	/* --- Diffuseness --- */
 	vec3 diffuse = albedo * ambient_occlusion / 3.1415;
 	
-	vec3 specular = texture(u_cubemap, v_R).rgb;
 
-    frag_color = vec4(specular, 1.0);
+	/* --- Specularness --- */
+	float mipmap_level = roughness*10;
+
+	vec3 specular = textureLod(u_cubemap, v_R, mipmap_level).rgb;
+
+	
+
+    frag_color = vec4(metallic*specular + (1-metallic) * diffuse, 1.0);
 }

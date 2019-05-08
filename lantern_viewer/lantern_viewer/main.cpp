@@ -76,6 +76,7 @@ void loadTextures(Context &ctx)
 void loadCubemaps(Context &ctx)
 {
 	ctx.skybox_obj.skybox_cubemap = loadCubemap(getExecPath() + "/cubemaps/LarnacaCastle/");
+	ctx.skybox_obj.skybox_cubemap_mipmap = loadCubemapMipmap(getExecPath() + "/cubemaps/LarnacaCastle/prefiltered/");
 }
 
 void init(Context& ctx)
