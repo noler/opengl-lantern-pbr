@@ -11,6 +11,7 @@ in vec3 v_R;
 
 // boolean switches
 flat in int v_use_albedo_map;
+flat in int v_use_roughness_map;
 
 // solid colors/values instead of maps
 in vec3 v_albedo_color;
@@ -37,11 +38,19 @@ void main() {
 	} else {
 		albedo = v_albedo_color;
 	}
-	
+
 	vec3 ambient_occlusion = texture(ambientOcclusionTex, v_texture).xyz;
 	float metallic = texture(metallicTex, v_texture).r;
 	vec3 normal = texture(normalTex, v_texture).rgb;
-	float roughness = texture(RoughnessTex, v_texture).r;
+
+	float roughness;
+	if (v_use_roughness_map == 0) {
+		roughness = texture(RoughnessTex, v_texture).r;
+	} else {
+		roughness = v_roughness_value;
+	}
+	
+	
 	
 	
 	/* --- Diffuseness --- */
@@ -49,10 +58,10 @@ void main() {
 	
 
 	/* --- Specularness --- */
-	float mipmap_level = roughness*10;
+	float mipmap_level = roughness*roughness*10;
+	// float mipmap_level = 2.0;
 	vec3 specular = textureLod(u_cubemap, v_R, mipmap_level).rgb;
-
 	
-	
-    frag_color = vec4(metallic*specular + (1-metallic) * diffuse, 1.0);
+    // frag_color = vec4(metallic*specular + (1-metallic) * diffuse, 1.0);
+	frag_color = vec4(specular, 1.0);
 }

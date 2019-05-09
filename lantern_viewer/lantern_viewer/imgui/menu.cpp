@@ -19,6 +19,9 @@ void displayImGui(Context &ctx)
 	{
 		ImGui::Checkbox("Use albedo map", (bool*) (&ctx.material_settings.use_albedo_map));
 		ImGui::ColorEdit3("Ambient Color", &ctx.material_settings.albedo_color[0]);
+
+		ImGui::Checkbox("Use roughness map", (bool*)(&ctx.material_settings.use_roughness_map));
+		ImGui::DragFloat("Roughness value", &ctx.material_settings.roughness_value, 0.01f, 0.0f, 1.0f);
 	}	
 
 	if (ImGui::CollapsingHeader("Statistics")) {

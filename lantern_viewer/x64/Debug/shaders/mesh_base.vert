@@ -18,23 +18,25 @@ uniform mat4 u_mvp;
 // material colors/values uniforms 
 uniform vec3 u_albedo_color;
 uniform int u_use_albedo_map;
-
-
-uniform float u_test_value;
-out float v_test_value;
+uniform float u_roughness_value;
+uniform int u_use_roughness_map;
 
 // material colors/values out
 out vec3 v_albedo_color;
+out float v_roughness_value;
 
 // boolean switches
 flat out int v_use_albedo_map;
+flat out int v_use_roughness_map;
+
 
 
 void main() 
 {
 	v_use_albedo_map = u_use_albedo_map;
 	v_albedo_color = u_albedo_color;
-	v_test_value = u_test_value;
+	v_use_roughness_map = u_use_roughness_map;
+	v_roughness_value = u_roughness_value;
 
 	v_normal = a_normal;
 
