@@ -52,7 +52,7 @@ void display(Context& ctx)
 
 	drawMeshes(ctx);
 
-	displayImGui();
+	displayImGui(ctx);
 }
 
 // Must be called at least once before cameraUpdate()
@@ -105,9 +105,11 @@ void init(Context& ctx)
 	initCamera(ctx);
 	updateCamera(ctx);
 
+	ctx.material_settings = MaterialSettings();
 
 	ModelManager manager;
 	manager.loadModel(getExecPath() + "/models/lantern/lantern_obj.obj");
+	
 	std::vector<Mesh> meshes = manager.getMesh();
 
 	ctx.lantern_obj.mesh_lantern_base = meshes.at(0);

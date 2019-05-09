@@ -1,10 +1,12 @@
 #pragma once
 #include <GLFW/glfw3.h>
-#include "global_settings.h"
 #include <glm/vec3.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
+
+#include "global_settings.h"
+#include "material_settings.h"
 
 // Struct for trackball
 struct Trackball
@@ -104,6 +106,8 @@ struct Context
 	GLuint shader_skybox;
 
 	GlobalSettings global_settings;
+
+	MaterialSettings material_settings;
 
 	float aspect;
 

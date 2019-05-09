@@ -15,9 +15,27 @@ out vec2 v_texture;
 
 uniform mat4 u_mv;
 uniform mat4 u_mvp;
+// material colors/values uniforms 
+uniform vec3 u_albedo_color;
+uniform int u_use_albedo_map;
+
+
+uniform float u_test_value;
+out float v_test_value;
+
+// material colors/values out
+out vec3 v_albedo_color;
+
+// boolean switches
+flat out int v_use_albedo_map;
+
 
 void main() 
 {
+	v_use_albedo_map = u_use_albedo_map;
+	v_albedo_color = u_albedo_color;
+	v_test_value = u_test_value;
+
 	v_normal = a_normal;
 
 	vec3 eye_position = normalize(mat3(u_mv) * a_normal);
