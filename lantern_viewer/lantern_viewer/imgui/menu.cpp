@@ -24,6 +24,12 @@ void displayImGui(Context &ctx)
 
 		ImGui::Checkbox("Use roughness map", (bool*)(&ctx.material_settings.use_roughness_map));
 		ImGui::DragFloat("Roughness value", &ctx.material_settings.roughness_value, 0.01f, 0.0f, 1.0f);
+
+		ImGui::DragFloat("Light X", &ctx.lights.position.x, 1.0f);
+		ImGui::DragFloat("Light Y", &ctx.lights.position.y, 1.0f);
+		ImGui::DragFloat("Light Z", &ctx.lights.position.z, 1.0f);
+		ImGui::ColorEdit3("Light Color", &ctx.lights.color[0]);
+
 	}	
 
 	if (ImGui::CollapsingHeader("Statistics")) {
