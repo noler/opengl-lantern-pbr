@@ -17,6 +17,11 @@ void displayImGui(Context &ctx)
 
 	ImGui_ImplGlfwGL3_NewFrame();
 	ImGui::Begin("Settings");
+
+	if (ImGui::CollapsingHeader("Global Settings"))
+	{
+		ImGui::Checkbox("Enable lantern (disable will show sphere)", (bool*)(&ctx.lantern_on));
+	}
 	if (ImGui::CollapsingHeader("Material Settings"))
 	{
 		ImGui::Checkbox("Use albedo map", (bool*) (&ctx.material_settings.use_albedo_map));
@@ -29,8 +34,7 @@ void displayImGui(Context &ctx)
 		ImGui::DragFloat("Light Y", &ctx.lights.position.y, 1.0f);
 		ImGui::DragFloat("Light Z", &ctx.lights.position.z, 1.0f);
 		ImGui::ColorEdit3("Light Color", &ctx.lights.color[0]);
-
-	}	
+	}
 
 	if (ImGui::CollapsingHeader("Statistics")) {
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);

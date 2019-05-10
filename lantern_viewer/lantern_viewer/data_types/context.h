@@ -99,6 +99,13 @@ struct SkyboxOBJ
 	GLuint skybox_cubemap_mipmap;
 };
 
+struct SphereOBJ
+{
+	Mesh mesh_sphere;
+	MeshVAO mesh_sphere_VAO;
+	Texture texture;
+};
+
 struct Light
 {
 	glm::vec3 position;
@@ -124,13 +131,16 @@ struct Context
 	GLuint defaultVAO;
 
 	Camera camera;
+
 	LanternOBJ lantern_obj;
-	
 	SkyboxOBJ skybox_obj;
+	SphereOBJ sphere_obj;
 
 	Trackball trackball;
 
 	Light lights;
+
+	bool lantern_on = 1;
 
 	double elapsed_time;
 };

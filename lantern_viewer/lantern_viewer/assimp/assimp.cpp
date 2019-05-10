@@ -41,7 +41,7 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 
 	aiFace* face;
 
-	for (GLuint v = 0; v < mesh->mNumVertices; v++)
+	for (int v = 0; v < mesh->mNumVertices; v++)
 	{
 		newMesh.vertices.push_back(
 			glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z)
@@ -78,8 +78,10 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 
 bool ModelManager::processData()
 {
-	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[0]));
-	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[1]));
+	for (int i = 0; i < modelScene->mNumMeshes;i++)
+	{
+		meshData.push_back(assimpGetMeshData(modelScene->mMeshes[i]));
+	}
 
 	return true;
 }

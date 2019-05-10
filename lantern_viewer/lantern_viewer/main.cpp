@@ -132,6 +132,13 @@ void init(Context& ctx)
 
 	ctx.lantern_obj.mesh_lantern_glass = meshes.at(1);
 	createMeshVAO(ctx, ctx.lantern_obj.mesh_lantern_glass, &ctx.lantern_obj.mesh_lantern_glassVAO);
+
+	ModelManager manager2;
+	manager2.loadModel(getExecPath() + "/models/icosphere_unwrapped.obj");
+	meshes = manager2.getMesh();
+	ctx.sphere_obj.mesh_sphere = meshes.at(0);
+	createMeshVAO(ctx, ctx.sphere_obj.mesh_sphere, &ctx.sphere_obj.mesh_sphere_VAO);
+	
 }
 
 void reloadShaders(Context* ctx)
