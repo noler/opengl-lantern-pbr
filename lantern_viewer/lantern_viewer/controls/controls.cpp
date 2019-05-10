@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "../utils.h"
 #include "../mesh/mesh.h"
+#include <imgui.h>
+#include "../imgui/lib/imgui_impl_glfw_gl3.h"
 
 // zoomStepFactor must be > 1
 double zoomStepFactor = 1.1;
@@ -60,6 +62,10 @@ void cursorPosCallback(GLFWwindow* window, double x, double y)
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+	// Forward event to GUI
+	ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
+	if (ImGui::GetIO().WantCaptureMouse) { return; }  // Skip other handling
+
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
 

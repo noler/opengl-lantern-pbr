@@ -75,7 +75,9 @@ void drawMeshes(Context& ctx)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthMask(GL_FALSE);
 	drawMesh(ctx, ctx.shader_lantern_glass, ctx.lantern_obj.mesh_lantern_glassVAO, ctx.lantern_obj.model);
+	glDepthMask(GL_TRUE);
 }
 
 void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 model)
@@ -86,14 +88,18 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glUniform3fv(glGetUniformLocation(program, "u_albedo_color"), 1, glm::value_ptr(ctx.material_settings.albedo_color));
 	glUniform1i(glGetUniformLocation(program, "u_use_roughness_map"), ctx.material_settings.use_roughness_map);
 	glUniform1f(glGetUniformLocation(program, "u_roughness_value"), ctx.material_settings.roughness_value);
+	
+	glUniform3fv(glGetUniformLocation(program, "u_camera_position"), 1, glm::value_ptr(ctx.camera.position));
 
+	glUniform3fv(glGetUniformLocation(program, "u_light_position"), 1, glm::value_ptr(ctx.lights.at(0).position));
+	glUniform3fv(glGetUniformLocation(program, "u_light_color"), 1, glm::value_ptr(ctx.lights.at(0).color));
 
-	glUniform1i(glGetUniformLocation(program, "albedoTex"), 0);
-	glUniform1i(glGetUniformLocation(program, "ambientOcclusionTex"), 1);
-	glUniform1i(glGetUniformLocation(program, "metallicTex"), 2);
-	glUniform1i(glGetUniformLocation(program, "normalTex"), 3);
-	glUniform1i(glGetUniformLocation(program, "OpacityTex"), 4);
-	glUniform1i(glGetUniformLocation(program, "RoughnessTex"), 5);
+	glUniform1i(glGetUniformLocation(program, "u_albedo_tex"), 0);
+	glUniform1i(glGetUniformLocation(program, "u_ambient_occlusion_tex"), 1);
+	glUniform1i(glGetUniformLocation(program, "u_metallic_tex"), 2);
+	glUniform1i(glGetUniformLocation(program, "u_normal_tex"), 3);
+	glUniform1i(glGetUniformLocation(program, "u_opacity_tex"), 4);
+	glUniform1i(glGetUniformLocation(program, "u_roughness_tex"), 5);
 
 	glActiveTexture(GL_TEXTURE0 + 0);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.albedo);
@@ -118,7 +124,10 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 	glm::mat4 mv = ctx.camera.view * model;
 	glm::mat4 mvp = ctx.camera.projection * mv;
-	
+
+
+	glUniformMatrix4fv(glGetUniformLocation(program, "u_m"),
+		1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mv"),
 		1, GL_FALSE, glm::value_ptr(mv));
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),

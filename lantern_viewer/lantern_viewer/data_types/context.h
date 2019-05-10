@@ -83,6 +83,7 @@ struct CameraProjection
 
 struct Camera
 {
+	glm::vec3 position;
 	glm::mat4 view;
 	glm::mat4 projection;
 	CameraProjection camera_projection;
@@ -96,6 +97,12 @@ struct SkyboxOBJ
 
 	GLuint skybox_cubemap;
 	GLuint skybox_cubemap_mipmap;
+};
+
+struct Light
+{
+	glm::vec3 position;
+	glm::vec3 color;
 };
 
 struct Context
@@ -122,6 +129,8 @@ struct Context
 	SkyboxOBJ skybox_obj;
 
 	Trackball trackball;
+
+	std::vector<Light> lights;
 
 	double elapsed_time;
 };
