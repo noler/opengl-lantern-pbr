@@ -52,6 +52,7 @@ void resizeCallback(GLFWwindow* window, int width, int height)
 	ctx->trackball.center = glm::vec2(width, height) / 2.0f;
 	ctx->aspect = float(ctx->global_settings.width) / float(ctx->global_settings.height);
 	glViewport(0, 0, width, height);
+	updateCamera(*ctx);
 }
 
 void cursorPosCallback(GLFWwindow* window, double x, double y)
