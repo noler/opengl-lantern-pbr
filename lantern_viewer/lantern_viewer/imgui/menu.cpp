@@ -14,7 +14,9 @@ void initImGui(Context ctx)
 
 void displayImGui(Context &ctx)
 {
+
 	ImGui_ImplGlfwGL3_NewFrame();
+	ImGui::Begin("Settings");
 	if (ImGui::CollapsingHeader("Material Settings"))
 	{
 		ImGui::Checkbox("Use albedo map", (bool*) (&ctx.material_settings.use_albedo_map));
@@ -32,6 +34,6 @@ void displayImGui(Context &ctx)
 		ImGui::Text("Max FPS %.1f FPS", max_fps);
 
 	}
-
+	ImGui::End();
 	ImGui::Render();
 }
