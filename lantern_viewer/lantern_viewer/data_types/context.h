@@ -130,7 +130,7 @@ struct Context
 
 	Trackball trackball;
 
-	std::vector<Light> lights;
+	Light lights;
 
 	double elapsed_time;
 };

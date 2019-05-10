@@ -91,8 +91,8 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	
 	glUniform3fv(glGetUniformLocation(program, "u_camera_position"), 1, glm::value_ptr(ctx.camera.position));
 
-	glUniform3fv(glGetUniformLocation(program, "u_light_position"), 1, glm::value_ptr(ctx.lights.at(0).position));
-	glUniform3fv(glGetUniformLocation(program, "u_light_color"), 1, glm::value_ptr(ctx.lights.at(0).color));
+	glUniform3fv(glGetUniformLocation(program, "u_light_position"), 1, glm::value_ptr(ctx.lights.position));
+	glUniform3fv(glGetUniformLocation(program, "u_light_color"), 1, glm::value_ptr(ctx.lights.color));
 
 	glUniform1i(glGetUniformLocation(program, "u_albedo_tex"), 0);
 	glUniform1i(glGetUniformLocation(program, "u_ambient_occlusion_tex"), 1);
@@ -124,7 +124,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 	glm::mat4 mv = ctx.camera.view * model;
 	glm::mat4 mvp = ctx.camera.projection * mv;
-
+	
 
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_m"),
 		1, GL_FALSE, glm::value_ptr(model));

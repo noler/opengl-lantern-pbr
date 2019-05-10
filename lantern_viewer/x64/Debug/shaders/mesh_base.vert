@@ -52,7 +52,7 @@ void main()
 	
 
 	v_light_color = u_light_color;
-	v_light_position = vec3(10,10,0);
+	v_light_position = u_light_position;
 
 	v_texture_coord = a_texture_coord;
     gl_Position = u_mvp * a_position;
