@@ -143,5 +143,11 @@
     <None Include="..\x64\Debug\shaders\mesh_glass.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="..\x64\Debug\shaders\skybox_cube.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\x64\Debug\shaders\skybox_cube.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
