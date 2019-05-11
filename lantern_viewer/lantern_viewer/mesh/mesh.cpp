@@ -153,7 +153,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 void updateCamera(Context& ctx)
 {
-	ctx.camera.position = trackballGetRotationMatrix(ctx.trackball) * glm::vec4(1, 1, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
+	ctx.camera.position = trackballGetRotationMatrix(ctx.trackball) * glm::vec4(1, 2, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
 
 	ctx.camera.projection = glm::perspective(
 		glm::radians(90.0f),
