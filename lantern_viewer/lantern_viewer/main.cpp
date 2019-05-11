@@ -110,11 +110,6 @@ void init(Context& ctx)
 	loadCubemaps(ctx);
 
 	ctx.camera.position = glm::vec3(0, 0.0, 100.0);
-	ctx.camera.view = glm::lookAt(
-		ctx.camera.position,
-		glm::vec3(0, 0, 0),
-		glm::vec3(0.0, 1.0, 0.0)
-	);
 
 	initLight(ctx);
 	initCamera(ctx);

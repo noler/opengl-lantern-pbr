@@ -21,7 +21,8 @@ void scrollCallback(GLFWwindow* window, double x_offset, double y_offset)
 		ctx->camera.camera_projection.zoomFactor /= zoomStepFactor;
 	}
 	ctx->camera.camera_projection.zoomFactor = glm::clamp(ctx->camera.camera_projection.zoomFactor, minZoomFactor, maxZoomFactor);
-
+	
+	ctx->camera.position = glm::vec3(ctx->camera.position.x * ctx->camera.camera_projection.zoomFactor, ctx->camera.position.y, ctx->camera.position.z);
 	updateCamera(*ctx);
 }
 

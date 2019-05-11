@@ -65,7 +65,8 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 
 void drawMeshes(Context& ctx)
 {
-	ctx.lantern_obj.model = glm::translate(trackballGetRotationMatrix(ctx.trackball), glm::vec3(0.0f, -30.0f, 0.0f));;
+	ctx.lantern_obj.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -30.0f, 0.0f));;
+	updateCamera(ctx);
 
 	glDepthMask(GL_FALSE);
 	drawCubeSkybox(ctx);
@@ -152,11 +153,19 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 void updateCamera(Context& ctx)
 {
+	ctx.camera.position = trackballGetRotationMatrix(ctx.trackball) * glm::vec4(1, 1, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
+
 	ctx.camera.projection = glm::perspective(
-		glm::radians(ctx.camera.camera_projection.zoomFactor * 90.0f),
+		glm::radians(90.0f),
 		ctx.aspect,
 		ctx.camera.camera_projection.zNear,
 		ctx.camera.camera_projection.zFar
+	);
+
+	ctx.camera.view = glm::lookAt(
+		ctx.camera.position,
+		glm::vec3(0, 0, 0),
+		glm::vec3(0.0, 1.0, 0.0)
 	);
 }
 
@@ -225,7 +234,7 @@ void createCube(Context& ctx)
 void drawCubeSkybox(Context& ctx)
 {
 	glUseProgram(ctx.shader_skybox);
-	glm::mat4 model = trackballGetRotationMatrix(ctx.trackball);
+	glm::mat4 model = glm::mat4(1.0f);
 
 	model = glm::scale(
 		model,
@@ -234,8 +243,6 @@ void drawCubeSkybox(Context& ctx)
 			300.5,
 			300.5)
 	);
-
-	// model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(3.2, 0, 0),
