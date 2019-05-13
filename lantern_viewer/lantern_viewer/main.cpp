@@ -86,7 +86,7 @@ void loadCubemaps(Context& ctx)
 void initLight(Context& ctx)
 {
 	Light light_src_1;
-	light_src_1.position = glm::vec3(10, 10, 10);
+	light_src_1.position = glm::vec3(140, 705, 112);
 
 	light_src_1.color = glm::vec3(0.98, 1.0 ,0.58);
 	ctx.lights = light_src_1;

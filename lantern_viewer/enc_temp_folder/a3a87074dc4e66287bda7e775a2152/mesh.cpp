@@ -41,7 +41,7 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	glBufferData(GL_ARRAY_BUFFER, textureNBytes, mesh.textureCoordinate.data(), GL_STATIC_DRAW);
 
 	// Generates and populates a VBO for the vertex tangents
-	glGenBuffers(1, &(meshVAO->tangentVBO));
+/*	glGenBuffers(1, &(meshVAO->tangentVBO));
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
 	auto tangentsNBytes = mesh.tangent.size() * sizeof(mesh.tangent[0]);
 	glBufferData(GL_ARRAY_BUFFER, tangentsNBytes, mesh.tangent.data(), GL_STATIC_DRAW);
@@ -51,7 +51,7 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
 	auto bitangentsNBytes = mesh.bitangent.size() * sizeof(mesh.bitangent[0]);
 	glBufferData(GL_ARRAY_BUFFER, bitangentsNBytes, mesh.bitangent.data(), GL_STATIC_DRAW);
-	
+	*/
 	// Creates a vertex array object (VAO) for drawing the mesh
 	glGenVertexArrays(1, &(meshVAO->vao));
 	glBindVertexArray(meshVAO->vao);
@@ -69,7 +69,7 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
 	glEnableVertexAttribArray(TEXTURE);
 	glVertexAttribPointer(TEXTURE, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	
+	/*
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->tangentVBO);
 	glEnableVertexAttribArray(TANGENT);
 	glVertexAttribPointer(TANGENT, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -77,7 +77,7 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->bitangentVBO);
 	glEnableVertexAttribArray(BITANGENT);
 	glVertexAttribPointer(BITANGENT, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	
+	*/
 	glBindVertexArray(ctx.defaultVAO); // unbinds the VAO
 
 	// Additional information required by draw calls
@@ -103,7 +103,7 @@ void drawMeshes(Context& ctx)
 
 		// glDepthMask(GL_FALSE);
 		drawMesh(ctx, ctx.shader_lantern_glass, ctx.lantern_obj.mesh_lantern_glassVAO, ctx.lantern_obj.model);
-		// glDepthMask(GL_TRUE);
+		glDepthMask(GL_TRUE);
 	}
 	else
 	{

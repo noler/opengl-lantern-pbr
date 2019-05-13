@@ -5,6 +5,8 @@
 layout(location = 0) in vec4 a_position;
 layout(location = 1) in vec3 a_normal;
 layout(location = 2) in vec2 a_texture_coord;
+layout(location = 3) in vec3 a_tangent;
+layout(location = 4) in vec3 a_bitangent;
 
 out vec3 v_N;		// Normal in view space
 
@@ -47,9 +49,6 @@ void main()
 	v_albedo_color = u_albedo_color;
 	v_use_roughness_map = u_use_roughness_map;
 	v_roughness_value = u_roughness_value;
-
-	
-	
 
 	v_light_color = u_light_color;
 	v_light_position = u_light_position;

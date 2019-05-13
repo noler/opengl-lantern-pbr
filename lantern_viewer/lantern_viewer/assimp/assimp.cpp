@@ -41,7 +41,7 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 
 	aiFace* face;
 
-	for (int v = 0; v < mesh->mNumVertices; v++)
+	for (GLuint v = 0; v < mesh->mNumVertices; v++)
 	{
 		newMesh.vertices.push_back(
 			glm::vec3(mesh->mVertices[v].x, mesh->mVertices[v].y, mesh->mVertices[v].z)
@@ -51,6 +51,13 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 			glm::vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z)
 		);
 
+		newMesh.tangent.push_back(
+			glm::vec3(mesh->mTangents[v].x, mesh->mTangents[v].y, mesh->mTangents[v].z)
+		);
+
+		newMesh.bitangent.push_back(
+			glm::vec3(mesh->mBitangents[v].x, mesh->mBitangents[v].y, mesh->mBitangents[v].z)
+		);
 
 		if (mesh->HasTextureCoords(0))
 		{
