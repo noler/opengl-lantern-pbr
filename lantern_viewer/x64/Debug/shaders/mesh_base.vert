@@ -25,6 +25,9 @@ uniform vec3 u_albedo_color;
 uniform int u_use_albedo_map;
 uniform float u_roughness_value;
 uniform int u_use_roughness_map;
+uniform int u_use_L0;
+uniform int u_use_ambient_IBL;
+
 
 // material colors/values out
 out vec3 v_albedo_color;
@@ -39,6 +42,8 @@ out vec3 v_camera_position;
 // boolean switches
 flat out int v_use_albedo_map;
 flat out int v_use_roughness_map;
+flat out int v_use_L0;
+flat out int v_use_ambient_IBL;
 
 void main() 
 {	
@@ -54,5 +59,9 @@ void main()
 	v_light_position = u_light_position;
 
 	v_texture_coord = a_texture_coord;
+
+	v_use_L0 = u_use_L0;
+	v_use_ambient_IBL = u_use_ambient_IBL;
+
     gl_Position = u_mvp * a_position;
 }

@@ -24,6 +24,9 @@ void displayImGui(Context &ctx)
 	}
 	if (ImGui::CollapsingHeader("Material Settings"))
 	{
+		ImGui::Checkbox("Use L0", (bool*)(&ctx.material_settings.use_L0));
+		ImGui::Checkbox("Use ambient IBL", (bool*)(&ctx.material_settings.use_ambient_IBL));
+
 		ImGui::Checkbox("Use albedo map", (bool*) (&ctx.material_settings.use_albedo_map));
 		ImGui::ColorEdit3("Ambient Color", &ctx.material_settings.albedo_color[0]);
 

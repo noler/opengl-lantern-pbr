@@ -9,4 +9,7 @@ struct MaterialSettings
 
 	int use_roughness_map = 1;
 	float roughness_value = 0.5;
+
+	int use_L0 = 1;
+	int use_ambient_IBL = 1;
 };
