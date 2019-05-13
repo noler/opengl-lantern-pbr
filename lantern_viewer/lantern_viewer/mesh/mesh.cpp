@@ -85,8 +85,7 @@ void drawMeshes(Context& ctx)
 	else
 	{
 		drawMesh(ctx, ctx.shader_lantern_base, ctx.sphere_obj.mesh_sphere_VAO,
-		         glm::scale(glm::mat4(1.0f), glm::vec3(30.0f)) * glm::translate(
-			         trackballGetRotationMatrix(ctx.trackball), glm::vec3(0.0f, 0.0f, 0.0f)));
+		         glm::scale(glm::mat4(1.0f), glm::vec3(30.0f)));
 	}
 }
 

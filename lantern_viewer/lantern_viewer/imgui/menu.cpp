@@ -37,6 +37,7 @@ void displayImGui(Context &ctx)
 	}
 
 	if (ImGui::CollapsingHeader("Statistics")) {
+		// From https://github.com/ocornut/imgui/issues/1200
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		min_fps = glm::min(ImGui::GetIO().Framerate, min_fps);
 		ImGui::Text("Min FPS %.1f FPS", min_fps);
