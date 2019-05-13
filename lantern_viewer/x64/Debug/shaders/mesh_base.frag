@@ -11,6 +11,8 @@ in vec3 v_camera_position;
 // boolean switches
 flat in int v_use_albedo_map;
 flat in int v_use_roughness_map;
+flat in int v_use_L0;
+flat in int v_use_ambient_IBL;
 
 // solid colors/values instead of maps
 in vec3 v_albedo_color;
@@ -98,5 +100,5 @@ void main() {
 
 	vec3 ambient_IBL = k_d * diffuse * ambient_occlusion;
 
-	frag_color = vec4(gamma_correction(L0 + ambient_IBL), 1.0);
+	frag_color = vec4(gamma_correction(v_use_L0 * L0 + v_use_ambient_IBL * ambient_IBL), 1.0);
 }

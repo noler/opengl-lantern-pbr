@@ -116,6 +116,9 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 {
 	glUseProgram(program);
 
+	glUniform1i(glGetUniformLocation(program, "u_use_L0"), ctx.material_settings.use_L0);
+	glUniform1i(glGetUniformLocation(program, "u_use_ambient_IBL"), ctx.material_settings.use_ambient_IBL);
+
 	glUniform1i(glGetUniformLocation(program, "u_use_albedo_map"), ctx.material_settings.use_albedo_map);
 	glUniform3fv(glGetUniformLocation(program, "u_albedo_color"), 1,
 	             glm::value_ptr(ctx.material_settings.albedo_color));
