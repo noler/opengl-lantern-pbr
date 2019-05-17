@@ -125,6 +125,9 @@
     <ClInclude Include="lodepng\lodepng.h">
       <Filter>Source Files\lodepng</Filter>
     </ClInclude>
+    <ClInclude Include="data_types\material_settings.h">
+      <Filter>Source Files\data_types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -138,6 +141,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="..\x64\Debug\shaders\mesh_glass.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\x64\Debug\shaders\skybox_cube.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\x64\Debug\shaders\skybox_cube.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

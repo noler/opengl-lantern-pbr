@@ -154,6 +154,7 @@
     <ClInclude Include="controls\trackball.h" />
     <ClInclude Include="data_types\context.h" />
     <ClInclude Include="data_types\global_settings.h" />
+    <ClInclude Include="data_types\material_settings.h" />
     <ClInclude Include="imgui\lib\imconfig.h" />
     <ClInclude Include="imgui\lib\imgui.h" />
     <ClInclude Include="imgui\lib\imgui_impl_glfw_gl3.h" />
@@ -171,6 +172,8 @@
     <None Include="..\x64\Debug\shaders\mesh_base.vert" />
     <None Include="..\x64\Debug\shaders\mesh_glass.frag" />
     <None Include="..\x64\Debug\shaders\mesh_glass.vert" />
+    <None Include="..\x64\Debug\shaders\skybox_cube.frag" />
+    <None Include="..\x64\Debug\shaders\skybox_cube.vert" />
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

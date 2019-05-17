@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "../utils.h"
 #include "../mesh/mesh.h"
+#include <imgui.h>
+#include "../imgui/lib/imgui_impl_glfw_gl3.h"
 
 // zoomStepFactor must be > 1
 double zoomStepFactor = 1.1;
@@ -19,7 +21,8 @@ void scrollCallback(GLFWwindow* window, double x_offset, double y_offset)
 		ctx->camera.camera_projection.zoomFactor /= zoomStepFactor;
 	}
 	ctx->camera.camera_projection.zoomFactor = glm::clamp(ctx->camera.camera_projection.zoomFactor, minZoomFactor, maxZoomFactor);
-
+	
+	ctx->camera.position = glm::vec3(ctx->camera.position.x * ctx->camera.camera_projection.zoomFactor, ctx->camera.position.y, ctx->camera.position.z);
 	updateCamera(*ctx);
 }
 
@@ -50,6 +53,7 @@ void resizeCallback(GLFWwindow* window, int width, int height)
 	ctx->trackball.center = glm::vec2(width, height) / 2.0f;
 	ctx->aspect = float(ctx->global_settings.width) / float(ctx->global_settings.height);
 	glViewport(0, 0, width, height);
+	updateCamera(*ctx);
 }
 
 void cursorPosCallback(GLFWwindow* window, double x, double y)
@@ -60,6 +64,10 @@ void cursorPosCallback(GLFWwindow* window, double x, double y)
 
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+	// Forward event to GUI
+	ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
+	if (ImGui::GetIO().WantCaptureMouse) { return; }  // Skip other handling
+
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
 

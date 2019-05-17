@@ -4,4 +4,4 @@
 
 void initImGui(Context ctx);
 
-void displayImGui();
+void displayImGui(Context &ctx);

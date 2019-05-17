@@ -1,10 +1,12 @@
 #pragma once
 #include <GLFW/glfw3.h>
-#include "global_settings.h"
 #include <glm/vec3.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
+
+#include "global_settings.h"
+#include "material_settings.h"
 
 // Struct for trackball
 struct Trackball
@@ -41,6 +43,8 @@ struct Mesh
 {
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
+	std::vector<glm::vec3> tangent;
+	std::vector<glm::vec3> bitangent;
 	std::vector<glm::vec2> textureCoordinate;
 	std::vector<uint32_t> indices;
 };
@@ -53,6 +57,8 @@ struct MeshVAO
 	GLuint vao;
 	GLuint vertexVBO;
 	GLuint normalVBO;
+	GLuint tangentVBO;
+	GLuint bitangentVBO;
 	GLuint indexVBO;
 	GLuint textureVBO;
 	int numVertices;
@@ -81,6 +87,7 @@ struct CameraProjection
 
 struct Camera
 {
+	glm::vec3 position;
 	glm::mat4 view;
 	glm::mat4 projection;
 	CameraProjection camera_projection;
@@ -93,6 +100,20 @@ struct SkyboxOBJ
 	GLuint skyboxVAO;
 
 	GLuint skybox_cubemap;
+	GLuint skybox_cubemap_mipmap;
+};
+
+struct SphereOBJ
+{
+	Mesh mesh_sphere;
+	MeshVAO mesh_sphere_VAO;
+	Texture texture;
+};
+
+struct Light
+{
+	glm::vec3 position;
+	glm::vec3 color;
 };
 
 struct Context
@@ -104,6 +125,8 @@ struct Context
 
 	GlobalSettings global_settings;
 
+	MaterialSettings material_settings;
+
 	float aspect;
 
 	GLuint triangleVAO;
@@ -112,11 +135,16 @@ struct Context
 	GLuint defaultVAO;
 
 	Camera camera;
+
 	LanternOBJ lantern_obj;
-	
 	SkyboxOBJ skybox_obj;
+	SphereOBJ sphere_obj;
 
 	Trackball trackball;
+
+	Light lights;
+
+	bool lantern_on = 1;
 
 	double elapsed_time;
 };

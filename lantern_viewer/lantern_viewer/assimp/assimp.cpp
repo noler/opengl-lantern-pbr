@@ -51,6 +51,13 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 			glm::vec3(mesh->mNormals[v].x, mesh->mNormals[v].y, mesh->mNormals[v].z)
 		);
 
+		newMesh.tangent.push_back(
+			glm::vec3(mesh->mTangents[v].x, mesh->mTangents[v].y, mesh->mTangents[v].z)
+		);
+
+		newMesh.bitangent.push_back(
+			glm::vec3(mesh->mBitangents[v].x, mesh->mBitangents[v].y, mesh->mBitangents[v].z)
+		);
 
 		if (mesh->HasTextureCoords(0))
 		{
@@ -78,8 +85,10 @@ Mesh ModelManager::assimpGetMeshData(const aiMesh* mesh)
 
 bool ModelManager::processData()
 {
-	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[0]));
-	meshData.push_back(assimpGetMeshData(modelScene->mMeshes[1]));
+	for (int i = 0; i < modelScene->mNumMeshes;i++)
+	{
+		meshData.push_back(assimpGetMeshData(modelScene->mMeshes[i]));
+	}
 
 	return true;
 }
