@@ -8,6 +8,11 @@ layout(location = 2) in vec2 a_texture_coord;
 layout(location = 3) in vec3 a_tangent;
 layout(location = 4) in vec3 a_bitangent;
 
+out LIGHTING {
+	flat int v_use_L0;
+	flat int v_use_ambient_IBL;
+} lightning_setting;
+
 // material colors/values out
 out MATERIAL {
 	vec3 v_albedo_color;
@@ -83,6 +88,9 @@ void main()
 	material.v_albedo_color = u_albedo_color;
 	material.v_use_roughness_map = u_use_roughness_map;
 	material.v_roughness_value = u_roughness_value;
+	
+	lightning_setting.v_use_L0 = u_use_L0;
+	lightning_setting.v_use_ambient_IBL = u_use_ambient_IBL;
 
 	uv.v_texture_coord = a_texture_coord;
 

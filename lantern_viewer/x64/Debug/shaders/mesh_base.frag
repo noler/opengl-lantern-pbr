@@ -3,6 +3,11 @@
 
 out vec4 frag_color;
 
+in LIGHTING {
+	flat int v_use_L0;
+	flat int v_use_ambient_IBL;
+} lightning_setting;
+
 // boolean switches & solid colors/values instead of maps
 in MATERIAL {
 	vec3 v_albedo_color;
@@ -118,5 +123,5 @@ void main() {
 
 	vec3 ambient_IBL = k_d * diffuse * ambient_occlusion;
 
-	frag_color = vec4(gamma_correction(v_use_L0 * L0 + v_use_ambient_IBL * ambient_IBL), 1.0);
+	frag_color = vec4(gamma_correction(lightning_setting.v_use_L0 * L0 + lightning_setting.v_use_ambient_IBL * ambient_IBL), 1.0);
 }
