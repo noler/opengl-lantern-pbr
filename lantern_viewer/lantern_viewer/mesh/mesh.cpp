@@ -42,13 +42,13 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 
 	// Generates and populates a VBO for the vertex tangents
 	glGenBuffers(1, &(meshVAO->tangentVBO));
-	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->tangentVBO);
 	auto tangentsNBytes = mesh.tangent.size() * sizeof(mesh.tangent[0]);
 	glBufferData(GL_ARRAY_BUFFER, tangentsNBytes, mesh.tangent.data(), GL_STATIC_DRAW);
 
 	// Generates and populates a VBO for the vertex bitangents
 	glGenBuffers(1, &(meshVAO->bitangentVBO));
-	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, meshVAO->bitangentVBO);
 	auto bitangentsNBytes = mesh.bitangent.size() * sizeof(mesh.bitangent[0]);
 	glBufferData(GL_ARRAY_BUFFER, bitangentsNBytes, mesh.bitangent.data(), GL_STATIC_DRAW);
 	
@@ -158,14 +158,10 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glActiveTexture(ctx.skybox_obj.skybox_cubemap_mipmap);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap_mipmap);
 
-	glm::mat4 mv = ctx.camera.view * model;
-	glm::mat4 mvp = ctx.camera.projection * mv;
-
+	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
 
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_m"),
 	                   1, GL_FALSE, glm::value_ptr(model));
-	glUniformMatrix4fv(glGetUniformLocation(program, "u_mv"),
-	                   1, GL_FALSE, glm::value_ptr(mv));
 	glUniformMatrix4fv(glGetUniformLocation(program, "u_mvp"),
 	                   1, GL_FALSE, glm::value_ptr(mvp));
 

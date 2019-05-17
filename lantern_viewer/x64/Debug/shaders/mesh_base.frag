@@ -2,26 +2,41 @@
 #version 150
 
 out vec4 frag_color;
-in vec2 v_texture_coord;
 
-in vec3 v_N;		// Normal in world (model) space
-in vec3 v_world_pos;
-in vec3 v_camera_position;
+// boolean switches & solid colors/values instead of maps
+in MATERIAL {
+	vec3 v_albedo_color;
+	flat int v_use_albedo_map;
 
-// boolean switches
-flat in int v_use_albedo_map;
-flat in int v_use_roughness_map;
-flat in int v_use_L0;
-flat in int v_use_ambient_IBL;
+	float v_roughness_value;
+	flat int v_use_roughness_map;
+	/* To be added: normal_map_scaler, use_metallic_map, metallic_value */
+} material;
 
-// solid colors/values instead of maps
-in vec3 v_albedo_color;
-in float v_ambient_occlusion_value;
-in float v_metallic_value;
-in float v_roughness_value;
+in UV_SPACE {
+	vec2 v_texture_coord;
+} uv;
 
-in vec3 v_light_position;
-in vec3 v_light_color;
+in WORLD_SPACE {
+	vec3 v_light_position;
+	vec3 v_light_color;
+	vec3 v_frag_pos;
+	vec3 v_camera_position;
+} world_in;
+
+struct WORLD {
+	vec3 normal_dir;
+	vec3 view_dir;
+	vec3 reflection_dir;
+	vec3 light_dir;
+	vec3 halfway_dir;
+} world;
+
+struct TANGENT_SPACE {
+	vec3 normal_dir;
+} tangent;
+
+in mat3 v_tangent2world;
 
 uniform sampler2D u_albedo_tex;
 uniform sampler2D u_ambient_occlusion_tex;
@@ -32,7 +47,7 @@ uniform sampler2D u_roughness_tex;
 
 uniform samplerCube u_cubemap;
 
-in float v_test_value;
+// Constants 
 float PI = 3.14159265359;
 float MAX_MIPMAP_LEVEL = 8.0;
 
@@ -59,42 +74,45 @@ float distribution(float roughness, float dot_prod) {
 }
 
 void main() {
-	vec3 N = v_N;
-	vec3 V = normalize(v_camera_position - v_world_pos);
-	vec3 R = reflect(-V, N);
+	tangent.normal_dir = texture(u_normal_tex, uv.v_texture_coord).rgb;
+	tangent.normal_dir = normalize(0.5*(2.0 * tangent.normal_dir) - 1.0);
+	world.normal_dir = v_tangent2world * tangent.normal_dir;
+	world.view_dir = normalize(world_in.v_camera_position - world_in.v_frag_pos);
+	world.light_dir = normalize(world_in.v_light_position - world_in.v_frag_pos);
+	world.halfway_dir = normalize(world.view_dir + world.light_dir);
 
-	vec3 albedo = texture(u_albedo_tex, v_texture_coord).xyz;
-	vec3 ambient_occlusion = texture(u_ambient_occlusion_tex, v_texture_coord).xyz;
-	float metallic = texture(u_metallic_tex, v_texture_coord).r;
-	vec3 normal = texture(u_normal_tex, v_texture_coord).rgb;
-	float roughness = texture(u_roughness_tex, v_texture_coord).r;
+	vec3 world_normal = normalize(v_tangent2world * tangent.normal_dir);
+	
+	world.reflection_dir = reflect(-world.view_dir, world.normal_dir);
+
+	vec3 albedo = texture(u_albedo_tex, uv.v_texture_coord).xyz;
+	vec3 ambient_occlusion = texture(u_ambient_occlusion_tex, uv.v_texture_coord).xyz;
+	float metallic = texture(u_metallic_tex, uv.v_texture_coord).r;
+	vec3 normal = texture(u_normal_tex, uv.v_texture_coord).rgb;
+	float roughness = texture(u_roughness_tex, uv.v_texture_coord).r;
 	float gloss = 1.0 - roughness;
-	vec3 irradiance = textureLod(u_cubemap, R, MAX_MIPMAP_LEVEL).rgb; 
+	vec3 irradiance = textureLod(u_cubemap, world.reflection_dir, gloss*MAX_MIPMAP_LEVEL).rgb; 
 
 	// F0 is specular color, is estimated by linear interpolation
 	vec3 F0 = mix(vec3(0.04), albedo, metallic);
-
-	// Reflectance calcuations (not part of IBL)
-	vec3 L = normalize(v_light_position - v_world_pos);
-	vec3 H = normalize(V + L);
 	
-	vec3 k_s = fresnel_schlick(F0, max(0, dot(H, V)), gloss);
+	vec3 k_s = fresnel_schlick(F0, max(0, dot(world.halfway_dir, world.light_dir)), gloss);
 	vec3 k_d = (1.0 - k_s) * metallic;
 
-	float D = distribution(roughness, max(0, dot(N, H)));
+	float D = distribution(roughness, max(0, dot(world.normal_dir, world.halfway_dir)));
 	vec3 F = k_s;
-	float G = geometry_smith(N, L, V, roughness);
+	float G = geometry_smith(world.normal_dir, world.light_dir, world.view_dir, roughness);
 
-	vec3 specular = (D * G * F) / (4 * max(0, dot(N, V)) * max(0, dot(N, L)) + 0.0001);
+	vec3 specular = (D * G * F) / (4 * max(0, dot(world.normal_dir, world.view_dir)) * max(0, dot(world.normal_dir, world.light_dir)) + 0.0001);
 
-	float attenuation = 1 / pow(length(v_light_position - v_world_pos), 2.0);
-	vec3 radiance = v_light_color; // * attenuation;
-	float NdotL = max(0, dot(N, L));
+	float attenuation = 1 / pow(length(world_in.v_light_position - world_in.v_frag_pos), 2.0);
+	vec3 radiance = world_in.v_light_color; // * attenuation;
+	float NdotL = max(0, dot(world.normal_dir, world.light_dir));
 
 	vec3 L0 = (k_d * (albedo/PI) + specular) * radiance * NdotL;
 
 	// Ambient lighning calculations (part of IBL)
-	k_s = fresnel_schlick(F0, max(0, dot(N, V)), gloss);
+	k_s = fresnel_schlick(F0, max(0, dot(world.normal_dir, world.normal_dir)), gloss);
 	k_d = 1.0 - k_s;
 	vec3 diffuse = irradiance * albedo;
 
