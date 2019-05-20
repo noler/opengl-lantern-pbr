@@ -108,7 +108,7 @@ void drawMeshes(Context& ctx)
 	else
 	{
 		drawMesh(ctx, ctx.shader_lantern_base, ctx.sphere_obj.mesh_sphere_VAO,
-		         glm::scale(glm::mat4(1.0f), glm::vec3(30.0f)));
+		         glm::scale(trackballGetRotationMatrix(ctx.trackball), glm::vec3(30.0f)));
 	}
 }
 
@@ -271,6 +271,7 @@ void drawCubeSkybox(Context& ctx)
 			300.5,
 			300.5)
 	);
+	model = ctx.lantern_obj.model * model;
 
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(3.2, 0, 0),
