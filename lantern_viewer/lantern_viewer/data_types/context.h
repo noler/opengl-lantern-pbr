@@ -112,6 +112,7 @@ struct SphereOBJ
 
 struct Light
 {
+	float strength = 1.0;
 	glm::vec3 position;
 	glm::vec3 color;
 };

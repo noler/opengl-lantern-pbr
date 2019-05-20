@@ -6,6 +6,7 @@ out vec4 frag_color;
 in LIGHTING {
 	flat int v_use_L0;
 	flat int v_use_ambient_IBL;
+	flat float v_strength;
 } lightning_setting;
 
 // boolean switches & solid colors/values instead of maps
@@ -15,7 +16,11 @@ in MATERIAL {
 
 	float v_roughness_value;
 	flat int v_use_roughness_map;
-	/* To be added: normal_map_scaler, use_metallic_map, metallic_value */
+
+	flat int v_use_metallic_map;
+	flat float v_metallic_value;
+
+	flat float v_normal_map_influence;
 } material;
 
 in UV_SPACE {
@@ -80,7 +85,7 @@ float distribution(float roughness, float dot_prod) {
 
 void main() {
 	tangent.normal_dir = texture(u_normal_tex, uv.v_texture_coord).rgb;
-	tangent.normal_dir = normalize(0.5*(2.0 * tangent.normal_dir) - 1.0);
+	tangent.normal_dir = normalize((0.5*(2.0 * tangent.normal_dir) - 1.0));
 	world.normal_dir = v_tangent2world * tangent.normal_dir;
 	world.view_dir = normalize(world_in.v_camera_position - world_in.v_frag_pos);
 	world.light_dir = normalize(world_in.v_light_position - world_in.v_frag_pos);
@@ -91,10 +96,22 @@ void main() {
 	world.reflection_dir = reflect(-world.view_dir, world.normal_dir);
 
 	vec3 albedo = texture(u_albedo_tex, uv.v_texture_coord).xyz;
+	if (material.v_use_albedo_map == 0) {
+		albedo = material.v_albedo_color;
+	}
+
 	vec3 ambient_occlusion = texture(u_ambient_occlusion_tex, uv.v_texture_coord).xyz;
+	
 	float metallic = texture(u_metallic_tex, uv.v_texture_coord).r;
-	vec3 normal = texture(u_normal_tex, uv.v_texture_coord).rgb;
+	if (material.v_use_metallic_map == 0) {
+		metallic = material.v_metallic_value;
+	}
+
 	float roughness = texture(u_roughness_tex, uv.v_texture_coord).r;
+	if (material.v_use_roughness_map == 0) {
+		roughness = material.v_roughness_value;
+	}
+
 	float gloss = 1.0 - roughness;
 	vec3 irradiance = textureLod(u_cubemap, world.reflection_dir, gloss*MAX_MIPMAP_LEVEL).rgb; 
 
@@ -111,13 +128,13 @@ void main() {
 	vec3 specular = (D * G * F) / (4 * max(0, dot(world.normal_dir, world.view_dir)) * max(0, dot(world.normal_dir, world.light_dir)) + 0.0001);
 
 	float attenuation = 1 / pow(length(world_in.v_light_position - world_in.v_frag_pos), 2.0);
-	vec3 radiance = world_in.v_light_color; // * attenuation;
+	vec3 radiance = lightning_setting.v_strength * world_in.v_light_color; // * attenuation;
 	float NdotL = max(0, dot(world.normal_dir, world.light_dir));
 
 	vec3 L0 = (k_d * (albedo/PI) + specular) * radiance * NdotL;
 
 	// Ambient lighning calculations (part of IBL)
-	k_s = fresnel_schlick(F0, max(0, dot(world.normal_dir, world.normal_dir)), gloss);
+	k_s = fresnel_schlick(F0, max(0, dot(world.normal_dir, world.view_dir)), gloss);
 	k_d = 1.0 - k_s;
 	vec3 diffuse = irradiance * albedo;
 

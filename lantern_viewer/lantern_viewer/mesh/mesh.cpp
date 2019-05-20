@@ -116,6 +116,11 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 {
 	glUseProgram(program);
 
+	glUniform1i(glGetUniformLocation(program, "u_use_metallic_map"), ctx.material_settings.use_metallic_map);
+	glUniform1f(glGetUniformLocation(program, "u_metallic_value"), ctx.material_settings.metallic_value);
+
+	glUniform1f(glGetUniformLocation(program, "u_normal_map_influence"), ctx.material_settings.normal_map_influence);
+
 	glUniform1i(glGetUniformLocation(program, "u_use_L0"), ctx.material_settings.use_L0);
 	glUniform1i(glGetUniformLocation(program, "u_use_ambient_IBL"), ctx.material_settings.use_ambient_IBL);
 
@@ -127,6 +132,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 	glUniform3fv(glGetUniformLocation(program, "u_camera_position"), 1, glm::value_ptr(ctx.camera.position));
 
+	glUniform1f(glGetUniformLocation(program, "u_light_strength"), ctx.lights.strength);
 	glUniform3fv(glGetUniformLocation(program, "u_light_position"), 1, glm::value_ptr(ctx.lights.position));
 	glUniform3fv(glGetUniformLocation(program, "u_light_color"), 1, glm::value_ptr(ctx.lights.color));
 
