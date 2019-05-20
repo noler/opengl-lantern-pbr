@@ -139,6 +139,8 @@ struct Context
 
 	LanternOBJ lantern_obj;
 	SkyboxOBJ skybox_obj;
+	SkyboxOBJ skybox_reverse_obj;
+
 	SphereOBJ sphere_obj;
 
 	Trackball trackball;

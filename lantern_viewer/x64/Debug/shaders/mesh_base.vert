@@ -43,7 +43,6 @@ out WORLD_SPACE {
 out mat3 v_tangent2world;
 out mat3 v_world2tangent;
 
-
 // light
 uniform vec3 u_light_position;
 uniform vec3 u_light_color;

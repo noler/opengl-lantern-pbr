@@ -87,7 +87,7 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 
 void drawMeshes(Context& ctx)
 {
-	ctx.lantern_obj.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -30.0f, 0.0f));;
+	ctx.lantern_obj.model = glm::translate(trackballGetRotationMatrix(ctx.trackball), glm::vec3(0.0f, -30.0f, 0.0f));;
 	updateCamera(ctx);
 
 	glDepthMask(GL_FALSE);
@@ -142,6 +142,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glUniform1i(glGetUniformLocation(program, "u_normal_tex"), 3);
 	glUniform1i(glGetUniformLocation(program, "u_opacity_tex"), 4);
 	glUniform1i(glGetUniformLocation(program, "u_roughness_tex"), 5);
+	glUniform1i(glGetUniformLocation(program, "u_skybox"), 6);
 
 	glActiveTexture(GL_TEXTURE0 + 0);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.albedo);
@@ -161,8 +162,8 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glActiveTexture(GL_TEXTURE0 + 5);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.roughness);
 
-	glActiveTexture(ctx.skybox_obj.skybox_cubemap_mipmap);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap_mipmap);
+	glActiveTexture(GL_TEXTURE0 + 6);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_reverse_obj.skybox_cubemap_mipmap);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
 
@@ -180,7 +181,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 void updateCamera(Context& ctx)
 {
-	ctx.camera.position = trackballGetRotationMatrix(ctx.trackball) * glm::vec4(1, 2, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
+	ctx.camera.position = glm::vec4(1, 2, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
 
 	ctx.camera.projection = glm::perspective(
 		glm::radians(90.0f),
@@ -279,7 +280,7 @@ void drawCubeSkybox(Context& ctx)
 
 	glm::mat4 projection = glm::ortho(-1.7f, 1.7f, -1.7f, 1.7f, 0.0f, 10.0f);
 
-	glActiveTexture(ctx.skybox_obj.skybox_cubemap);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;

@@ -55,7 +55,7 @@ uniform sampler2D u_normal_tex;
 uniform sampler2D u_opacity_tex;
 uniform sampler2D u_roughness_tex;
 
-uniform samplerCube u_cubemap;
+uniform samplerCube u_skybox;
 
 // Constants 
 float PI = 3.14159265359;
@@ -85,6 +85,9 @@ float distribution(float roughness, float dot_prod) {
 
 void main() {
 	tangent.normal_dir = texture(u_normal_tex, uv.v_texture_coord).rgb;
+	
+	tangent.normal_dir= vec3(0.5, 0.5, 1.0);
+	
 	tangent.normal_dir = normalize((0.5*(2.0 * tangent.normal_dir) - 1.0));
 	world.normal_dir = v_tangent2world * tangent.normal_dir;
 	world.view_dir = normalize(world_in.v_camera_position - world_in.v_frag_pos);
@@ -113,7 +116,7 @@ void main() {
 	}
 
 	float gloss = 1.0 - roughness;
-	vec3 irradiance = textureLod(u_cubemap, world.reflection_dir, gloss*MAX_MIPMAP_LEVEL).rgb; 
+	vec3 irradiance = textureLod(u_skybox, world.reflection_dir, gloss*MAX_MIPMAP_LEVEL).rgb; 
 
 	// F0 is specular color, is estimated by linear interpolation
 	vec3 F0 = mix(vec3(0.04), albedo, metallic);
