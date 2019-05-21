@@ -88,7 +88,7 @@ void main()
 {	
 	v_tangent2world = get_tangent_to_world_matrix(u_m, a_tangent, a_bitangent, a_normal);
 
-	world_out.v_frag_pos = mat3(u_m) * a_position.xyz;
+	world_out.v_frag_pos = vec3(u_m * a_position);
 	world_out.v_light_color = u_light_color;
 	world_out.v_light_position = u_light_position;
 	world_out.v_camera_position = u_camera_position;

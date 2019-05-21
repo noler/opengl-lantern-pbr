@@ -101,9 +101,9 @@ void drawMeshes(Context& ctx)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// glDepthMask(GL_FALSE);
+		glDepthMask(GL_FALSE);
 		drawMesh(ctx, ctx.shader_lantern_glass, ctx.lantern_obj.mesh_lantern_glassVAO, ctx.lantern_obj.model);
-		// glDepthMask(GL_TRUE);
+		glDepthMask(GL_TRUE);
 	}
 	else
 	{
@@ -163,7 +163,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.roughness);
 
 	glActiveTexture(GL_TEXTURE0 + 6);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_reverse_obj.skybox_cubemap_mipmap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap_mipmap);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
 
@@ -271,7 +271,6 @@ void drawCubeSkybox(Context& ctx)
 			300.5,
 			300.5)
 	);
-	model = ctx.lantern_obj.model * model;
 
 	glm::mat4 view = glm::lookAt(
 		glm::vec3(3.2, 0, 0),
