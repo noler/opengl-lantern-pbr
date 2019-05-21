@@ -90,8 +90,6 @@ void main() {
 		tangent.normal_dir = vec3(0.5, 0.5, 1.0);
 	}
 	
-	tangent.normal_dir= vec3(0.5, 0.5, 1.0);
-	
 	tangent.normal_dir = normalize((0.5*(2.0 * tangent.normal_dir) - 1.0));
 	world.normal_dir = normalize(v_tangent2world * tangent.normal_dir);
 	world.view_dir = normalize(world_in.v_camera_position - world_in.v_frag_pos);
