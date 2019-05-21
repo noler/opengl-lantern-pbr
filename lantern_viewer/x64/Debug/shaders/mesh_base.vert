@@ -25,6 +25,7 @@ out MATERIAL {
 	flat int v_use_metallic_map;
 	flat float v_metallic_value;
 
+	flat int v_use_normal_map;
 	flat float v_normal_map_influence;
 } material;
 
@@ -58,6 +59,7 @@ uniform int u_use_roughness_map;
 uniform int u_use_L0;
 uniform int u_use_ambient_IBL;
 uniform int u_use_metallic_map;
+uniform int u_use_normal_map;
 uniform float u_metallic_value;
 uniform float u_normal_map_influence;
 uniform float u_light_strength;
@@ -99,6 +101,7 @@ void main()
 	material.v_roughness_value = u_roughness_value;
 	material.v_use_metallic_map = u_use_metallic_map;
 	material.v_metallic_value = u_metallic_value;
+	material.v_use_normal_map = u_use_normal_map;
 	material.v_normal_map_influence = u_normal_map_influence;
 	
 	lightning_setting.v_strength = u_light_strength;

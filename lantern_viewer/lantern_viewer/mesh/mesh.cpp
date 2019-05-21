@@ -119,6 +119,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glUniform1i(glGetUniformLocation(program, "u_use_metallic_map"), ctx.material_settings.use_metallic_map);
 	glUniform1f(glGetUniformLocation(program, "u_metallic_value"), ctx.material_settings.metallic_value);
 
+	glUniform1i(glGetUniformLocation(program, "u_use_normal_map"), ctx.material_settings.use_normal_map);
 	glUniform1f(glGetUniformLocation(program, "u_normal_map_influence"), ctx.material_settings.normal_map_influence);
 
 	glUniform1i(glGetUniformLocation(program, "u_use_L0"), ctx.material_settings.use_L0);

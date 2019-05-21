@@ -35,8 +35,10 @@ void displayImGui(Context& ctx)
 	
 		ImGui::Checkbox("Use metallic map", (bool*)(&ctx.material_settings.use_metallic_map));
 		ImGui::DragFloat("Metallic value", &ctx.material_settings.metallic_value, 0.01f, 0.0f, 1.0f);;
-	
-		ImGui::DragFloat("Normal map influence", &ctx.material_settings.normal_map_influence, 0.01f, 0.0f);;
+
+
+		ImGui::Checkbox("Use normal map", (bool*)(&ctx.material_settings.use_normal_map));
+		// ImGui::DragFloat("Normal map influence", &ctx.material_settings.normal_map_influence, 0.01f, 0.0f);;
 	}
 
 	if (ImGui::CollapsingHeader("Light Settings"))

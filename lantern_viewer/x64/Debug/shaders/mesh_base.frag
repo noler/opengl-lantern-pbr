@@ -20,6 +20,7 @@ in MATERIAL {
 	flat int v_use_metallic_map;
 	flat float v_metallic_value;
 
+	flat int v_use_normal_map;
 	flat float v_normal_map_influence;
 } material;
 
@@ -85,8 +86,11 @@ float distribution(float roughness, float dot_prod) {
 
 void main() {
 	tangent.normal_dir = texture(u_normal_tex, uv.v_texture_coord).rgb;
+	if (material.v_use_normal_map == 0) {
+		tangent.normal_dir = vec3(0.5, 0.5, 1.0);
+	}
 	
-	//tangent.normal_dir= vec3(0.5, 0.5, 1.0);
+	tangent.normal_dir= vec3(0.5, 0.5, 1.0);
 	
 	tangent.normal_dir = normalize((0.5*(2.0 * tangent.normal_dir) - 1.0));
 	world.normal_dir = normalize(v_tangent2world * tangent.normal_dir);

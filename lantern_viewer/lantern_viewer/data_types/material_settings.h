@@ -16,6 +16,7 @@ struct MaterialSettings
 	int use_L0 = 1;
 	int use_ambient_IBL = 1;
 
+	int use_normal_map = 1;
 	float normal_map_influence = 1.0;
 	
 };
