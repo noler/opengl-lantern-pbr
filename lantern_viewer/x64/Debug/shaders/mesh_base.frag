@@ -6,6 +6,7 @@ out vec4 frag_color;
 in LIGHTING {
 	flat int v_use_L0;
 	flat int v_use_ambient_IBL;
+	flat float v_strength;
 } lightning_setting;
 
 // boolean switches & solid colors/values instead of maps
@@ -15,7 +16,12 @@ in MATERIAL {
 
 	float v_roughness_value;
 	flat int v_use_roughness_map;
-	/* To be added: normal_map_scaler, use_metallic_map, metallic_value */
+
+	flat int v_use_metallic_map;
+	flat float v_metallic_value;
+
+	flat int v_use_normal_map;
+	flat float v_normal_map_influence;
 } material;
 
 in UV_SPACE {
@@ -50,7 +56,7 @@ uniform sampler2D u_normal_tex;
 uniform sampler2D u_opacity_tex;
 uniform sampler2D u_roughness_tex;
 
-uniform samplerCube u_cubemap;
+uniform samplerCube u_skybox;
 
 // Constants 
 float PI = 3.14159265359;
@@ -80,8 +86,12 @@ float distribution(float roughness, float dot_prod) {
 
 void main() {
 	tangent.normal_dir = texture(u_normal_tex, uv.v_texture_coord).rgb;
-	tangent.normal_dir = normalize(0.5*(2.0 * tangent.normal_dir) - 1.0);
-	world.normal_dir = v_tangent2world * tangent.normal_dir;
+	if (material.v_use_normal_map == 0) {
+		tangent.normal_dir = vec3(0.5, 0.5, 1.0);
+	}
+	
+	tangent.normal_dir = normalize((0.5*(2.0 * tangent.normal_dir) - 1.0));
+	world.normal_dir = normalize(v_tangent2world * tangent.normal_dir);
 	world.view_dir = normalize(world_in.v_camera_position - world_in.v_frag_pos);
 	world.light_dir = normalize(world_in.v_light_position - world_in.v_frag_pos);
 	world.halfway_dir = normalize(world.view_dir + world.light_dir);
@@ -91,12 +101,24 @@ void main() {
 	world.reflection_dir = reflect(-world.view_dir, world.normal_dir);
 
 	vec3 albedo = texture(u_albedo_tex, uv.v_texture_coord).xyz;
+	if (material.v_use_albedo_map == 0) {
+		albedo = material.v_albedo_color;
+	}
+
 	vec3 ambient_occlusion = texture(u_ambient_occlusion_tex, uv.v_texture_coord).xyz;
+	
 	float metallic = texture(u_metallic_tex, uv.v_texture_coord).r;
-	vec3 normal = texture(u_normal_tex, uv.v_texture_coord).rgb;
+	if (material.v_use_metallic_map == 0) {
+		metallic = material.v_metallic_value;
+	}
+
 	float roughness = texture(u_roughness_tex, uv.v_texture_coord).r;
+	if (material.v_use_roughness_map == 0) {
+		roughness = material.v_roughness_value;
+	}
+
 	float gloss = 1.0 - roughness;
-	vec3 irradiance = textureLod(u_cubemap, world.reflection_dir, gloss*MAX_MIPMAP_LEVEL).rgb; 
+	 
 
 	// F0 is specular color, is estimated by linear interpolation
 	vec3 F0 = mix(vec3(0.04), albedo, metallic);
@@ -111,13 +133,22 @@ void main() {
 	vec3 specular = (D * G * F) / (4 * max(0, dot(world.normal_dir, world.view_dir)) * max(0, dot(world.normal_dir, world.light_dir)) + 0.0001);
 
 	float attenuation = 1 / pow(length(world_in.v_light_position - world_in.v_frag_pos), 2.0);
-	vec3 radiance = world_in.v_light_color; // * attenuation;
+	vec3 radiance = lightning_setting.v_strength * world_in.v_light_color; // * attenuation;
 	float NdotL = max(0, dot(world.normal_dir, world.light_dir));
 
 	vec3 L0 = (k_d * (albedo/PI) + specular) * radiance * NdotL;
 
 	// Ambient lighning calculations (part of IBL)
-	k_s = fresnel_schlick(F0, max(0, dot(world.normal_dir, world.normal_dir)), gloss);
+	float theta_x = radians(180);
+	float theta_y = radians(180);
+	float theta_z = radians(-25);
+
+	mat3 rot_x = mat3(vec3(1,0,0), vec3(0,cos(theta_x), sin(theta_x)), vec3(0, -sin(theta_x), cos(theta_x)));
+	mat3 rot_y = mat3(vec3(cos(theta_y),0, -sin(theta_y)), vec3(0,1,0), vec3(sin(theta_y), 0, cos(theta_y)));
+	mat3 rot_z = mat3(vec3(cos(theta_z),sin(theta_z), 0), vec3(-sin(theta_z),cos(theta_z),0), vec3(0,0,1));
+
+	vec3 irradiance = textureLod(u_skybox, rot_z*rot_y*world.reflection_dir, gloss*MAX_MIPMAP_LEVEL).rgb;
+	k_s = fresnel_schlick(F0, max(0, dot(world.normal_dir, world.view_dir)), gloss);
 	k_d = 1.0 - k_s;
 	vec3 diffuse = irradiance * albedo;
 

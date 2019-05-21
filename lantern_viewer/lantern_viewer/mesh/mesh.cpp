@@ -87,7 +87,7 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 
 void drawMeshes(Context& ctx)
 {
-	ctx.lantern_obj.model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -30.0f, 0.0f));;
+	ctx.lantern_obj.model = glm::translate(trackballGetRotationMatrix(ctx.trackball), glm::vec3(0.0f, -30.0f, 0.0f));;
 	updateCamera(ctx);
 
 	glDepthMask(GL_FALSE);
@@ -101,20 +101,26 @@ void drawMeshes(Context& ctx)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// glDepthMask(GL_FALSE);
+		glDepthMask(GL_FALSE);
 		drawMesh(ctx, ctx.shader_lantern_glass, ctx.lantern_obj.mesh_lantern_glassVAO, ctx.lantern_obj.model);
-		// glDepthMask(GL_TRUE);
+		glDepthMask(GL_TRUE);
 	}
 	else
 	{
 		drawMesh(ctx, ctx.shader_lantern_base, ctx.sphere_obj.mesh_sphere_VAO,
-		         glm::scale(glm::mat4(1.0f), glm::vec3(30.0f)));
+		         glm::scale(trackballGetRotationMatrix(ctx.trackball), glm::vec3(30.0f)));
 	}
 }
 
 void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 model)
 {
 	glUseProgram(program);
+
+	glUniform1i(glGetUniformLocation(program, "u_use_metallic_map"), ctx.material_settings.use_metallic_map);
+	glUniform1f(glGetUniformLocation(program, "u_metallic_value"), ctx.material_settings.metallic_value);
+
+	glUniform1i(glGetUniformLocation(program, "u_use_normal_map"), ctx.material_settings.use_normal_map);
+	glUniform1f(glGetUniformLocation(program, "u_normal_map_influence"), ctx.material_settings.normal_map_influence);
 
 	glUniform1i(glGetUniformLocation(program, "u_use_L0"), ctx.material_settings.use_L0);
 	glUniform1i(glGetUniformLocation(program, "u_use_ambient_IBL"), ctx.material_settings.use_ambient_IBL);
@@ -127,6 +133,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 	glUniform3fv(glGetUniformLocation(program, "u_camera_position"), 1, glm::value_ptr(ctx.camera.position));
 
+	glUniform1f(glGetUniformLocation(program, "u_light_strength"), ctx.lights.strength);
 	glUniform3fv(glGetUniformLocation(program, "u_light_position"), 1, glm::value_ptr(ctx.lights.position));
 	glUniform3fv(glGetUniformLocation(program, "u_light_color"), 1, glm::value_ptr(ctx.lights.color));
 
@@ -136,6 +143,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glUniform1i(glGetUniformLocation(program, "u_normal_tex"), 3);
 	glUniform1i(glGetUniformLocation(program, "u_opacity_tex"), 4);
 	glUniform1i(glGetUniformLocation(program, "u_roughness_tex"), 5);
+	glUniform1i(glGetUniformLocation(program, "u_skybox"), 6);
 
 	glActiveTexture(GL_TEXTURE0 + 0);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.albedo);
@@ -155,7 +163,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 	glActiveTexture(GL_TEXTURE0 + 5);
 	glBindTexture(GL_TEXTURE_2D, ctx.lantern_obj.texture.roughness);
 
-	glActiveTexture(ctx.skybox_obj.skybox_cubemap_mipmap);
+	glActiveTexture(GL_TEXTURE0 + 6);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap_mipmap);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;
@@ -174,7 +182,7 @@ void drawMesh(Context& ctx, GLuint program, const MeshVAO& meshVAO, glm::mat4 mo
 
 void updateCamera(Context& ctx)
 {
-	ctx.camera.position = trackballGetRotationMatrix(ctx.trackball) * glm::vec4(1, 2, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
+	ctx.camera.position = glm::vec4(1, 2, 100.0, 1) * ctx.camera.camera_projection.zoomFactor;
 
 	ctx.camera.projection = glm::perspective(
 		glm::radians(90.0f),
@@ -273,7 +281,7 @@ void drawCubeSkybox(Context& ctx)
 
 	glm::mat4 projection = glm::ortho(-1.7f, 1.7f, -1.7f, 1.7f, 0.0f, 10.0f);
 
-	glActiveTexture(ctx.skybox_obj.skybox_cubemap);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, ctx.skybox_obj.skybox_cubemap);
 
 	glm::mat4 mvp = ctx.camera.projection * ctx.camera.view * model;

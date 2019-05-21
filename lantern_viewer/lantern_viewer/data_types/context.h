@@ -112,6 +112,7 @@ struct SphereOBJ
 
 struct Light
 {
+	float strength = 1.0;
 	glm::vec3 position;
 	glm::vec3 color;
 };
@@ -138,6 +139,8 @@ struct Context
 
 	LanternOBJ lantern_obj;
 	SkyboxOBJ skybox_obj;
+	SkyboxOBJ skybox_reverse_obj;
+
 	SphereOBJ sphere_obj;
 
 	Trackball trackball;

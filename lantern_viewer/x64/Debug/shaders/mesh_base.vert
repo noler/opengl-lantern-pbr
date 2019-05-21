@@ -11,6 +11,7 @@ layout(location = 4) in vec3 a_bitangent;
 out LIGHTING {
 	flat int v_use_L0;
 	flat int v_use_ambient_IBL;
+	flat float v_strength;
 } lightning_setting;
 
 // material colors/values out
@@ -20,6 +21,12 @@ out MATERIAL {
 
 	float v_roughness_value;
 	flat int v_use_roughness_map;
+
+	flat int v_use_metallic_map;
+	flat float v_metallic_value;
+
+	flat int v_use_normal_map;
+	flat float v_normal_map_influence;
 } material;
 
 out UV_SPACE {
@@ -37,7 +44,6 @@ out WORLD_SPACE {
 out mat3 v_tangent2world;
 out mat3 v_world2tangent;
 
-
 // light
 uniform vec3 u_light_position;
 uniform vec3 u_light_color;
@@ -52,6 +58,11 @@ uniform float u_roughness_value;
 uniform int u_use_roughness_map;
 uniform int u_use_L0;
 uniform int u_use_ambient_IBL;
+uniform int u_use_metallic_map;
+uniform int u_use_normal_map;
+uniform float u_metallic_value;
+uniform float u_normal_map_influence;
+uniform float u_light_strength;
 
 /*
  * PRE: local_tangent, local_bitangent, local_normal are in the meshs own local coordinate system, NOT worldspace.
@@ -79,7 +90,7 @@ void main()
 {	
 	v_tangent2world = get_tangent_to_world_matrix(u_m, a_tangent, a_bitangent, a_normal);
 
-	world_out.v_frag_pos = mat3(u_m) * a_position.xyz;
+	world_out.v_frag_pos = vec3(u_m * a_position);
 	world_out.v_light_color = u_light_color;
 	world_out.v_light_position = u_light_position;
 	world_out.v_camera_position = u_camera_position;
@@ -88,7 +99,12 @@ void main()
 	material.v_albedo_color = u_albedo_color;
 	material.v_use_roughness_map = u_use_roughness_map;
 	material.v_roughness_value = u_roughness_value;
+	material.v_use_metallic_map = u_use_metallic_map;
+	material.v_metallic_value = u_metallic_value;
+	material.v_use_normal_map = u_use_normal_map;
+	material.v_normal_map_influence = u_normal_map_influence;
 	
+	lightning_setting.v_strength = u_light_strength;
 	lightning_setting.v_use_L0 = u_use_L0;
 	lightning_setting.v_use_ambient_IBL = u_use_ambient_IBL;
 

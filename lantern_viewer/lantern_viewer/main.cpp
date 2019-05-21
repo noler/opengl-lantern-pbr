@@ -79,8 +79,11 @@ void loadTextures(Context& ctx)
 
 void loadCubemaps(Context& ctx)
 {
-	ctx.skybox_obj.skybox_cubemap = loadCubemap(getExecPath() + "/cubemaps/NiagraFalls2/");
-	ctx.skybox_obj.skybox_cubemap_mipmap = loadCubemap(getExecPath() + "/cubemaps/NiagraFalls2/"); //loadCubemapMipmap(getExecPath() + "/cubemaps/LarnacaCastle/prefiltered/");
+	ctx.skybox_obj.skybox_cubemap = loadCubemap(getExecPath() + "/cubemaps/NiagraFalls2/normal/");
+	ctx.skybox_obj.skybox_cubemap_mipmap = loadCubemap(getExecPath() + "/cubemaps/NiagraFalls2/normal/"); //loadCubemapMipmap(getExecPath() + "/cubemaps/LarnacaCastle/prefiltered/");
+
+	ctx.skybox_reverse_obj.skybox_cubemap = loadCubemap(getExecPath() + "/cubemaps/NiagraFalls2/");
+	ctx.skybox_reverse_obj.skybox_cubemap_mipmap = loadCubemap(getExecPath() + "/cubemaps/NiagraFalls2/");
 }
 
 void initLight(Context& ctx)
