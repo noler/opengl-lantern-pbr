@@ -1,4 +1,4 @@
-# Physical Based Rendering
+# Physically Based Rendering
 ![](readme_files/lantern.gif)
 
 We have implemented physical based rendering in OpenGL using Cook-Torrance BRDF and are using image based lighting for the ambient lighting.
