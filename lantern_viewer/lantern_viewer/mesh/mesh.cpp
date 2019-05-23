@@ -87,7 +87,10 @@ void createMeshVAO(Context& ctx, const Mesh& mesh, MeshVAO* meshVAO)
 
 void drawMeshes(Context& ctx)
 {
+	float elaped_time = glfwGetTime();
 	ctx.lantern_obj.model = glm::translate(trackballGetRotationMatrix(ctx.trackball), glm::vec3(0.0f, -30.0f, 0.0f));;
+	ctx.lantern_obj.model = glm::rotate(ctx.lantern_obj.model, (2 * glm::pi<float>())*elaped_time/3, glm::vec3(0.0, 1.0, 0.0));
+
 	updateCamera(ctx);
 
 	glDepthMask(GL_FALSE);

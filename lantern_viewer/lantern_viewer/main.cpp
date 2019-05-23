@@ -53,7 +53,7 @@ void display(Context& ctx)
 
 	drawMeshes(ctx);
 
-	displayImGui(ctx);
+	// displayImGui(ctx);
 }
 
 // Must be called at least once before cameraUpdate()
